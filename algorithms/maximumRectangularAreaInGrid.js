@@ -6,9 +6,9 @@
 
  Example:
 
- POPP
- OPPP
- OO0P
+ 1O11
+ O111
+ OO01
 
  col heights
 
