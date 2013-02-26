@@ -8,7 +8,7 @@
 
  1O11
  O111
- OO01
+ OOO1
 
  col heights
 
