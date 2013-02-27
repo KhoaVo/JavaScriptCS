@@ -112,12 +112,3 @@ Knapsack01.prototype = {
         }
     }
 };
-
-var algorithm = new Knapsack01(5);
-algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
-
-console.log(algorithm.run());
-
-algorithm.addItem({v:6,w:2});
-
-console.log(algorithm.run());
