@@ -1,4 +1,3 @@
-
 /*
 Algorithm based on this wonder description
  http://www.youtube.com/watch?v=EH6h7WA7sDw
@@ -112,3 +111,9 @@ Knapsack01.prototype = {
         }
     }
 };
+
+if(typeof module !== "undefined" && module.exports)
+    module.exports = Knapsack01;
+
+if ( typeof define === "function" && define.amd) 
+    define( "knapsack01", [], function () { return Knapsack01; } );
