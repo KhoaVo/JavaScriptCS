@@ -1,19 +1,24 @@
 
 /*
+Algorithm based on this wonder description
+ http://www.youtube.com/watch?v=EH6h7WA7sDw
 
     Usage:
 
-    var algorithm = new Knapsack01(5);
-    algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
+ var algorithm = new Knapsack01(5);
+ algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
 
-    algorithm.run();
+ console.log(algorithm.run()); //9
+
+ algorithm.addItem({v:6,w:2});
+
+ console.log(algorithm.run());  //13
 
  */
 var Knapsack01 = function(maximumWeight){
     this.maxWeight = maximumWeight;
     this.items = [];
 }
-
 
 Knapsack01.prototype = {
     constructor: Knapsack01,
@@ -22,9 +27,8 @@ Knapsack01.prototype = {
 
         var items = this.items,
             prevSol,curSol,
-            i, w, l = items.length,
-            curItem, m = [],k = [],
-            max, toKeep = [];
+            i, j, w, l = items.length,
+            curItem, m = [],k = [];
 
         this._initArrays(m,k);
         for( i = 1; i <= l; i++){
@@ -32,7 +36,11 @@ Knapsack01.prototype = {
             for(w = 1; w <= this.maxWeight; w++){
                 prevSol = m[i-1][w];
                 if(w >= curItem.w){
-                    curSol =  m[i-1][w - curItem.w] + curItem.v;
+                    if(m[i-1][w - curItem.w])
+                        curSol =   m[i-1][w - curItem.w] + curItem.v;
+                    else
+                        curSol = curItem.v;
+
                     m[i][w] = Math.max(prevSol,curSol);
                     k[i][w] = curSol >= prevSol ? 1:0;
                 }else{
@@ -42,21 +50,34 @@ Knapsack01.prototype = {
             }
         }
 
-        max = 0;
-        for(i = items.length; i > 0; i--){
-            for(j = w; j > 0; j--){
+        return this._traceKeepArray(k);
+    },
+
+    _traceKeepArray: function(k){
+        var cur,max = 0,toKeep = [],
+            weightRemaining = this.maxWeight,
+            items = this.items,l=this.items.length, i,j;
+
+        for(i = l; i > 0; i--){
+            for(j = weightRemaining; j > 0;j--){
                 if(k[i][j]){
-                    j -= items[i - 1].w;
-                    toKeep.push(items[i-1]);
-                    max += items[i-1].v;
+                    cur = items[i - 1];
+                    if(j >= cur.w){
+                        max += cur.v;
+                        toKeep.push(cur);
+                        weightRemaining -= cur.w;
+                        break;
+                    }
                 }else{
                     i--;
                 }
             }
         }
 
-       // max = m.pop().pop();
-        return max;
+        return  {
+            maxValue:max,
+            packed:toKeep
+        };
     },
 
     setMaxWeight: function(w){
@@ -71,6 +92,11 @@ Knapsack01.prototype = {
         this.items.push(item);
     },
 
+    /*
+        Initialize the optimal packing value of a knapsack that has no
+        capacity to 0 for all items.
+
+     */
     _initArrays: function(maxValuesForW,keep){
 
         var i = this.items.length + 1;
@@ -82,7 +108,16 @@ Knapsack01.prototype = {
         i = this.maxWeight + 1;
         while(i--){
             maxValuesForW[0].push(0);
-            keep.push(0);
+            keep[0].push(0);
         }
     }
 };
+
+var algorithm = new Knapsack01(5);
+algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
+
+console.log(algorithm.run());
+
+algorithm.addItem({v:6,w:2});
+
+console.log(algorithm.run());
