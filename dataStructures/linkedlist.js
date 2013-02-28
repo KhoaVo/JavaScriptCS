@@ -55,11 +55,12 @@
             var res = null;
 
             while(cur != null){
-                if(idx = i){
+                if(idx == i){
                     res = cur.value;
+                    break;
                 }
 
-                i++;
+                idx++;
                 cur = cur.next;
             }
 
