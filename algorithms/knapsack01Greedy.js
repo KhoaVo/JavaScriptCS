@@ -2,12 +2,12 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('JsCsUtils'),require('knapsack01'));
+        exports = module.exports = factory(require('jsCsUtils'),require('knapsack01'));
     else
         root.Knapsack01Greedy = factory(root.JsCsUtils,root.Knapsack01);
 
     if ( typeof define === "function" && define.amd)
-        define( "knapsack01Greedy", ["JsCsUtils","knapsack01"], function (JsCsUtils,Knapsack01) { return factory(JsCsUtils,Knapsack01); } );
+        define( "knapsack01Greedy", ["jsCsUtils","knapsack01"], function (JsCsUtils,Knapsack01) { return factory(JsCsUtils,Knapsack01); } );
 
 
 })(this,function(JsCsUtils,Knapsack01){
