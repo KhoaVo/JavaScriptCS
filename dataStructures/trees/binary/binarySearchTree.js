@@ -15,7 +15,7 @@
 
         constructor: BinaryTree,
 
-        add: function(item){
+        insert: function(item){
 
             var node = this._newNode(item);
             var cur;
@@ -25,6 +25,12 @@
             }else{
 
             }
+        },
+
+        _insert: function(node,item){
+
+            var res = this._compare(item,node.value);
+
         },
 
         remove: function(){
