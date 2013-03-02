@@ -1,17 +1,38 @@
 /*
+ * Maximum area in rectangle implementation in JavaScript
+ * Copyright (c) 2013 Khoa Vo
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/*
  Starting from the first row we use the current maximum column heights to find the largest
  rectangle best on those heights. Then we adjust the maximum column heights for the next row and
  and so on. At each row we solve the problem of the largest rectangle. After all rows have been iterated,
  we take the maximum of all the solved sub problems.
 
  Example:
-
  1O11
  O111
  OOO1
 
  col heights
-
  1st round: [1,0,1,1] max rect area = 2
  2nd round: [0,1,2,2] max rect area = 4
  3rd round: [0,0,0,3] max rect area = 3
@@ -21,23 +42,8 @@
  run time is O(n)
  where n = number of elements in the grid
 
- Usage:
-
- var solver = new MaxRectangularAreaInGrid(1);
- solver.setGrid([
-    [1,1,0,0,1],
-    [1,1,1,1,1]
- ]);
-
- console.log(solver.run()); // should output 5
- solver.addToGrid([1,1,0,0,0]);
- console.log(solver.run()); // should output 6
-
-
 You can run the above example by doing
-
  MaxRectangularAreaInGrid.test();
-
  */
 
 /*

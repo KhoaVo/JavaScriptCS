@@ -1,26 +1,32 @@
+/*
+ * Dynamic programming knapsack algorithm implementation in JavaScript
+ * Copyright (c) 2013 Khoa Vo
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 /*
 Algorithm based on this wonder description
- http://www.youtube.com/watch?v=EH6h7WA7sDw
+http://www.youtube.com/watch?v=EH6h7WA7sDw
 
-    Usage:
-
- var algorithm = new Knapsack01(5);
- algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
-
- console.log(algorithm.run()); //9
-
- algorithm.addItem({v:6,w:2});
-
- console.log(algorithm.run());  //13
-
- You can run this example by just doing
-
- Knapsack01.test();
-
+ run Knapsack01.test();
  */
-
-
 (function(root){
 
     var Knapsack01 = function(maximumWeight){
@@ -87,17 +93,9 @@ Algorithm based on this wonder description
             };
         },
 
-        setMaxWeight: function(w){
-            this.maxWeight = w;
-        },
-
-        setItems: function(items){
-            this.items = items;
-        },
-
-        addItem: function(item){
-            this.items.push(item);
-        },
+        setMaxWeight: function(w){this.maxWeight = w;},
+        setItems: function(items){this.items = items;},
+        addItem: function(item){this.items.push(item);},
 
         /*
          Initialize the optimal packing value of a knapsack that has no
@@ -139,7 +137,7 @@ Algorithm based on this wonder description
         root.Knapsack01 = Knapsack01;
 
     if ( typeof define === "function" && define.amd)
-        define( "knapsack01", [], function () { return Knapsack01; } );
+        define( [], function () { return Knapsack01; } );
 
 
 })(this);

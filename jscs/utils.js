@@ -23,7 +23,7 @@
         root.JsCsUtils = JsCsUtils;
 
     if ( typeof define === "function" && define.amd)
-        define( "jsCsUtils", [], function () { return JsCsUtils; } );
+        define( [], function () { return JsCsUtils; } );
 })(this);
 
 
