@@ -137,7 +137,7 @@ http://www.youtube.com/watch?v=EH6h7WA7sDw
         root.Knapsack01 = Knapsack01;
 
     if ( typeof define === "function" && define.amd)
-        define( [], function () { return Knapsack01; } );
+        define(function () { return Knapsack01; } );
 
 
 })(this);

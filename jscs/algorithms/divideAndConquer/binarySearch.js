@@ -110,6 +110,6 @@
         root.BinarySearch = BinarySearch;
 
     if ( typeof define === "function" && define.amd)
-        define( "binarysearch", [], function () { return BinarySearch; } );
+        define(function () { return BinarySearch; } );
 
 })(this);
