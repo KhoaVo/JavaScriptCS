@@ -172,7 +172,7 @@
         var bt = new BinaryTree(function(a,b){return a-b;});
 
         [38,3,5,66,44,23,1,23,43,987,543,234,2,4,54,28].forEach(function(n){
-           bt.insert(n);
+            bt.insert(n);
         });
 
         var a = [];
@@ -187,6 +187,19 @@
 
         a = [];
         bt.postOrder(function(i,d){a.push(arguments);});
+        console.log(a);
+        console.log();
+
+        a = [];
+        bt.levelOrder(function(i,d){a.push(arguments);});
+        console.log(a);
+        console.log();
+
+        console.log(bt.find(43) === 43);
+
+        bt.remove(44);
+        a = [];
+        bt.inOrder(function(i,d){a.push(arguments); });
         console.log(a);
         console.log();
     };
