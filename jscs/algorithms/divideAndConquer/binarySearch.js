@@ -26,8 +26,8 @@
 
     /*
         @param compareFunc a function that takes in the  (value,itemInArray, itemIndex)
-         this function should return -1 if the value considered less than the itemInArray, 0 if it's equal to and
-         1 if it's greater.
+         this function should return a value less than 0 if the value considered less than the itemInArray, 0 if it's equal to and
+         greater than 1 if it's greater.
      */
     var BinarySearch = function(compareFunc){
         this.compareFunc = compareFunc;
@@ -46,25 +46,39 @@
         },
 
         //return the index of the first index found to contain the value
+        //recursive implementation
         find: function(value){
-            var start  = 0,
-                res,
-                stop   = this.items.length - 1,
-                middle      = Math.floor((stop + start)/2),
-                items = this.items,
-                compareFunc = this.compareFunc;
+            return this._find(value,0,this.items.length);
+        },
 
-            while(start < stop && (res = compareFunc(value,items[middle],middle)) !== 0 ){
-                //adjust search area
+        _find: function(value,min,max){
+            var mid = Math.floor((max + min)/2);
+            var comp = this.compareFunc(value,this.items[mid]);
+
+            if(comp === 0)
+                return mid;
+            else if (comp < 0)
+                return this._find(value,min,--max);
+            else
+                return this._find(value,++min,max);
+        },
+
+       //same as find but coded iteratively
+        findIterative: function(value){
+            var res,min  = 0,
+                max   = this.items.length - 1,
+                mid      = Math.floor((max + min)/2);
+
+            while(min < max && (res = this.compareFunc(value,this.items[mid],mid)) !== 0 ){
                 if (res < 0)
-                    stop = middle - 1;
+                    max = mid - 1;
                  else if (res > 0)
-                    start = middle + 1;
+                    min = mid + 1;
 
-                middle = Math.floor((stop + start)/2);
+                mid = Math.floor((max + min)/2);
             }
 
-            return middle == -1 || compareFunc(value,items[middle],middle) !== 0  ? -1 : middle;
+            return mid == -1 || this.compareFunc(value,this.items[mid],mid) !== 0  ? -1 : mid;
         },
 
         //Find the start and end indices (inclusive) where the value is located
@@ -101,6 +115,7 @@
 
         b.setItems([1,1,1,1,2,2,2,3,4,5,5,5,5]);
         console.log(b.find(3)); //7
+        console.log(b.findIterative(3)); //7
         console.log(b.findRange(2)) // 4 to 6
     };
 

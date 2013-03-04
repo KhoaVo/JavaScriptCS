@@ -26,7 +26,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscsutils'),require('knapsack01'));
+        exports = module.exports = factory(require('../../utils'),require('../dynamicProgramming/knapsack01'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/utils","jscs/algorithms/dynamicProgramming/knapsack01"], function (JsCsUtils,Knapsack01) { return factory(JsCsUtils,Knapsack01); } );
     else
@@ -56,8 +56,7 @@
             maxWeight = this.maxWeight,
             curWeight = 0,
             items = this.items,
-            l = this.items.length,
-            guess;
+            l = this.items.length;
 
         //sort items in descending order of value to weight ratio
         //O(n log n) => Hopefully :) really depends on the javascript implementation
