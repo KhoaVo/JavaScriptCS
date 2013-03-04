@@ -108,16 +108,6 @@
         }
     };
 
-    BinarySearch.test = function(){
-        var b = new BinarySearch(function(a,b){
-            return a-b;
-        });
-
-        b.setItems([1,1,1,1,2,2,2,3,4,5,5,5,5]);
-        console.log(b.find(3)); //7
-        console.log(b.findIterative(3)); //7
-        console.log(b.findRange(2)) // 4 to 6
-    };
 
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = BinarySearch;

@@ -90,23 +90,6 @@
 
     };
 
-    MatrixPeakFinding.test = function(){
-        var algorithm = new MatrixPeakFinding(function(a,b){
-           return a-b;
-        });
-
-        algorithm.setMatrix([[1,2,10,9,8,7,6,5,4]]);
-        console.log(algorithm.run());
-
-        algorithm.setMatrix([
-            [10,8,10,10],
-            [14,13,12,11],
-            [15,9,11,21],
-            [16,17,19,20]
-        ]);
-        console.log(algorithm.run());
-    };
-
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = MatrixPeakFinding;
     else

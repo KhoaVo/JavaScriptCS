@@ -41,9 +41,6 @@
 
  run time is O(n)
  where n = number of elements in the grid
-
-You can run the above example by doing
- MaxRectangularAreaInGrid.test();
  */
 
 /*
@@ -153,28 +150,13 @@ You can run the above example by doing
         }
     };
 
-    /*
-        Test cases
-     */
-    MaxRectangularAreaInGrid.test = function(){
-        var solver = new MaxRectangularAreaInGrid(1);
-        solver.setGrid([
-            [1,1,0,0,1],
-            [1,1,1,1,1]
-        ]);
-        console.log(solver.run()); // should output 5
-        solver.addToGrid([1,1,0,0,0]);
-        console.log(solver.run()); // should output 6
-    };
-
-
     if(typeof module !== "undefined" && module.exports)
             exports = module.exports = MaxRectangularAreaInGrid;
     else
         root.MaxRectangularAreaInGrid = MaxRectangularAreaInGrid;
 
     if ( typeof define === "function" && define.amd)
-        define( "maxrectangularareaingrid", [], function () { return MaxRectangularAreaInGrid; } );
+        define( [], function () { return MaxRectangularAreaInGrid; } );
 
 })(this);
 

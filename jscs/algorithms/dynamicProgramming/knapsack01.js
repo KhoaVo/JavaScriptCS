@@ -24,8 +24,6 @@
 /*
 Algorithm based on this wonder description
 http://www.youtube.com/watch?v=EH6h7WA7sDw
-
- run Knapsack01.test();
  */
 (function(root){
 
@@ -117,19 +115,6 @@ http://www.youtube.com/watch?v=EH6h7WA7sDw
             }
         }
     };
-
-    /*
-     Test cases
-     */
-    Knapsack01.test = function(){
-        var algorithm = new Knapsack01(5);
-        algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
-        console.log(algorithm.run()); //9
-        algorithm.addItem({v:6,w:2});
-        console.log(algorithm.run());  //13
-    };
-
-
 
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = Knapsack01;

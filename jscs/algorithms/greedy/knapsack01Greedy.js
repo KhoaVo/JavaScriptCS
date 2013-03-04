@@ -38,16 +38,14 @@
 
     //Extend the dynamic programming solution of Knapsack01
     //so we can keep all the utility functions
-    //var Knapsack01Greedy = Object.create(Knapsack01);
     var Knapsack01Greedy = function(maxWeight){
         Knapsack01Greedy.super.constructor.call(this,maxWeight);
     };
     JsCsUtils.extend(Knapsack01Greedy,Knapsack01);
 
 
-    //We override the default dynamic solution of
-    //knapsack01 with a greedy approximation algorithm
-    // O(nLog(n)) running time
+    //override knapsack01 with a greedy approximation algorithm
+    // O(nLog(n)) running time because of the sort
     Knapsack01Greedy.prototype.run = function(){
 
         "use strict";
@@ -59,7 +57,6 @@
             l = this.items.length;
 
         //sort items in descending order of value to weight ratio
-        //O(n log n) => Hopefully :) really depends on the javascript implementation
         items.sort(function(a,b){
             var aRatio = a.v/ a.w;
             var bRatio = b.v/ b.w;
@@ -74,9 +71,6 @@
         }
 
         //sanity check the solution
-        //and make sure no one item with an unfavorable ratio
-        //that fits in the knapsack
-        //has a value greater than the entire solution
         items.forEach(function(i){
             if(i.w <= maxWeight && i.v > max){
                 max = i.v;
@@ -88,22 +82,6 @@
             maxValue: max,
             packed:toKeep
         };
-    };
-
-    Knapsack01Greedy.test = function(){
-
-        var algorithm = new Knapsack01Greedy(5);
-
-        algorithm.setItems([{v:5,w:3},{v:3,w:2},{v:4,w:1}]);
-        console.log(algorithm.run()); //9
-
-        algorithm.addItem({v:6,w:2});
-        console.log(algorithm.run());  //10
-
-        algorithm.setMaxWeight(1000);
-        algorithm.setItems([{v:2,w:1},{v:20,w:5},{v:1000,w:1000}]);
-        console.log(algorithm.run()); //1000
-
     };
 
     return Knapsack01Greedy;
