@@ -55,7 +55,6 @@
             if(node === NOT_FOUND)
                 return;
 
-
             if(node.left && node.right){
                 min = this._findMin(node.right);
                 node.value =min.value;
