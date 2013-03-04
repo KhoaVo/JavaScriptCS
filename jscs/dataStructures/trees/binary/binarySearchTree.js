@@ -58,6 +58,7 @@
             if(node.left && node.right){
                 min = this._findMin(node.right);
                 node.value =min.value;
+                min.value = null;
                 this._replaceNodeInParent(min,min.right);
             }else if(node.left){
                 this._replaceNodeInParent(node,node.left);
