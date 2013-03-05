@@ -7,6 +7,7 @@ require.config({
 
 var _testIncludes = [
     '$algorithms/maximumRectangularAreaInGrid',
+    '$algorithms/wordBreak',
     '$algorithms/divideAndConquer/binarySearch',
     '$algorithms/divideAndConquer/matrixPeakFinding',
     '$algorithms/greedy/knapsack01Greedy',
