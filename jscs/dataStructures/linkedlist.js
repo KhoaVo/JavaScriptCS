@@ -72,10 +72,9 @@
         },
 
         addRange: function(items){
-            var self = this;
-            items.forEach(function(i){
-                self.add(i);
-            });
+            var l = arguments.length;
+            for(var i = 0; i < l; i++)
+                this.add(arguments[i]);
         },
 
         get: function(i){
@@ -155,7 +154,6 @@
 
             return res;
         }
-
     };
 
     if(typeof module !== "undefined" && module.exports)
@@ -164,8 +162,6 @@
         define([], function () { return LinkedList; } );
     else
         root.LinkedList = LinkedList;
-
-
 
 
 })(this);

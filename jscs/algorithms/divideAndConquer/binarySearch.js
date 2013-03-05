@@ -111,10 +111,11 @@
 
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = BinarySearch;
+    else if ( typeof define === "function" && define.amd)
+        define(function () { return BinarySearch; } );
     else
         root.BinarySearch = BinarySearch;
 
-    if ( typeof define === "function" && define.amd)
-        define(function () { return BinarySearch; } );
+
 
 })(this);

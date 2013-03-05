@@ -92,11 +92,10 @@
 
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = MatrixPeakFinding;
+    else if ( typeof define === "function" && define.amd)
+        define(function () { return MatrixPeakFinding; } );
     else
         root.MatrixPeakFinding = MatrixPeakFinding;
-
-    if ( typeof define === "function" && define.amd)
-        define(function () { return MatrixPeakFinding; } );
 
 })(this);
 

@@ -2,7 +2,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscs/algorithms/dynamicProgramming/knapsack01'));
+        exports = module.exports = factory(require('../../../jscs/algorithms/dynamicProgramming/knapsack01'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/algorithms/dynamicProgramming/knapsack01"], function (Knapsack01) { return factory(Knapsack01); } );
 

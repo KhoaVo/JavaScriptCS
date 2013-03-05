@@ -2,7 +2,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscs/algorithms/wordBreak'));
+        exports = module.exports = factory(require('../../jscs/algorithms/wordBreak'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/algorithms/wordBreak"], function (WordBreak) { return factory(WordBreak); } );
 

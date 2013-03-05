@@ -2,7 +2,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscs/algorithms/divideAndConquer/binarySearch'));
+        exports = module.exports = factory(require('../../../jscs/algorithms/divideAndConquer/binarySearch'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/algorithms/divideAndConquer/binarySearch"], function (BinarySearch) { return factory(BinarySearch); } );
 

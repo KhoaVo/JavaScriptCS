@@ -2,7 +2,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscs/algorithms/divideAndConquer/matrixPeakFinding'));
+        exports = module.exports = factory(require('../../../jscs/algorithms/divideAndConquer/matrixPeakFinding'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/algorithms/divideAndConquer/matrixPeakFinding"], function (MatrixPeakFinding) { return factory(MatrixPeakFinding); } );
 

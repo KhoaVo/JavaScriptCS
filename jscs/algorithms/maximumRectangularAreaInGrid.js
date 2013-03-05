@@ -152,11 +152,10 @@
 
     if(typeof module !== "undefined" && module.exports)
             exports = module.exports = MaxRectangularAreaInGrid;
+    else if ( typeof define === "function" && define.amd)
+        define( [], function () { return MaxRectangularAreaInGrid; } );
     else
         root.MaxRectangularAreaInGrid = MaxRectangularAreaInGrid;
-
-    if ( typeof define === "function" && define.amd)
-        define( [], function () { return MaxRectangularAreaInGrid; } );
 
 })(this);
 

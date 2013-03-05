@@ -2,7 +2,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscs/algorithms/greedy/knapsack01Greedy'));
+        exports = module.exports = factory(require('../../../jscs/algorithms/greedy/knapsack01Greedy'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/algorithms/greedy/knapsack01Greedy"], function (Knapsack01Greedy) { return factory(Knapsack01Greedy); } );
 

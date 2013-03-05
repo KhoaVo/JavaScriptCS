@@ -2,7 +2,7 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('jscs/algorithms/maximumRectangularAreaInGrid'));
+        exports = module.exports = factory(require('../../jscs/algorithms/maximumRectangularAreaInGrid'));
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/algorithms/maximumRectangularAreaInGrid"], function (MaxRectangularAreaInGrid) { return factory(MaxRectangularAreaInGrid); } );
 
