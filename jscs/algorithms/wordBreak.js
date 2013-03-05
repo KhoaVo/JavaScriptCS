@@ -47,5 +47,12 @@
         return null;
     };
 
+    if(typeof module !== "undefined" && module.exports)
+        exports = module.exports = WordBreak;
+    else if ( typeof define === "function" && define.amd)
+        define([], function () { return WordBreak; } );
+    else
+        root.WordBreak = BinaryTree;
+
 })(this);
 

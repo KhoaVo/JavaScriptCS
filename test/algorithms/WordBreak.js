@@ -1,4 +1,4 @@
-(function(root){
+(function(root,factory){
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
