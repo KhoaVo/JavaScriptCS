@@ -1,5 +1,6 @@
 /*
- * Word break implementation in JavaScript
+ * String permutation implementation in JavaScript
+ * based on the algorithm described in Practical Algorithms in C++ by Bryan Flamig
  * Copyright (c) 2013 Khoa Vo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,38 +22,48 @@
  * THE SOFTWARE.
  */
 (function(root){
-    var WordBreak = function(str,dict,memo){
 
-        memo = memo || {};
-        if(dict.hasOwnProperty(str))
-            return str;
-        if(memo.hasOwnProperty(str))
-            return memo[str];
-
-        var l = str.length;
-        var prefix,suffix,segSuffix;
-
-        for(var i= 0; i < l; i++){
-            prefix = str.substr(0,i);
-            if(dict[prefix]){
-                segSuffix = WordBreak(str.substr(i),dict,memo);
-                if(segSuffix){
-                    memo[str] = prefix + " " + segSuffix;
-                    return prefix + " " + segSuffix;
-                }
-            }
-        }
-
-        memo[str] = null;
-        return null;
+    var StringPermutation = function(str){
+        var res = [];
+        permute(str.split(''),0,str.length,res);
+        return res;
     };
 
+    var rotateLeft = function(v, start, n){
+        var tmp = v[start];
+        for (var i = start; i < n-1; i++) {
+            v[i] = v[i+1];
+        }
+        v[n-1] = tmp;
+    };
+
+    var swap = function(a,i,j){
+        var temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    };
+
+    var permute = function(v, start,n,res)
+    {
+        var i, j;
+        res.push(v.join(''));
+        if (start < n) {
+            for (i = n-2; i >= start; i--) {
+                for (j = i + 1; j < n; j++) {
+                    swap(v, i, j);
+                    permute(v, i+1, n,res);
+                }
+                rotateLeft(v, i, n);
+            }
+        }
+    };
+
+
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = WordBreak;
+        exports = module.exports = StringPermutation;
     else if ( typeof define === "function" && define.amd)
-        define([], function () { return WordBreak; } );
+        define([], function () { return StringPermutation; } );
     else
-        root.WordBreak = WordBreak;
+        root.StringPermutation = StringPermutation;
 
 })(this);
-
