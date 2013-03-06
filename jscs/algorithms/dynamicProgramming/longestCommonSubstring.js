@@ -24,79 +24,62 @@
 
 
 /* IN PROGRESS */
-(function(root){
+(function(root,factory){
 
 
-    var LongestCommonSubString = function(){};
-    LongestCommonSubString.prototype = {
-        constructor:LongestCommonSubString,
+    if(typeof module !== "undefined" && module.exports)
+        exports = module.exports = factory(require('../../matrixUtils'));
+    else if ( typeof define === "function" && define.amd)
+        define( ["jscs/matrixUtils"], function (JsCsMatrixUtils) { return factory(JsCsMatrixUtils); } );
+    else
+        root.LongestCommonSubString = factory(root.JsCsMatrixUtils);
 
+})(this,function(JsCsMatrixUtils){
 
-        solve: function(){
+    var set = JsCsMatrixUtils.setAtIndicies,
+        get = JsCsMatrixUtils.getAtIndicies;
 
-        },
+    var LongestCommonSubString = function(){
 
-        _solve:function(indicies,dimension){
-
-            var i,l = dimension.length;
-            if(indicies < this.numDimensions){
-                for(i = 1; i <= l; i++){
-                    indicies.push(i);
-                    this._solve(indicies,dimension[i]);
-                    indicies.pop();
-                }
-            }else{
-                for(i = 1; i <= l; i++){
-                    indicies.push(i);
-                    if(this.checkEqualsAtIndicies(indicies)){
-
-                    }
-                    indicies.pop();
-
-                }
-            }
-        },
-
-        //takes a variable number of strings
-        setStrings: function(){
-
-            var strings = [],
-                m = makeMatrix(arguments.length),
-                l = arguments.length,i;
-
-            for(i=0; i < arguments.length; i++)
-                strings.push(arguments[i].split(''));
-
-            this.m = this._makeMatrix(l);
-            this.strings = strings;
-            this.numDimensions = l;
-        },
-
-        checkEqualsAtIndicies:function(indicies){
-
-            var arrays = this.strings,
-                l = arrays.length,
-                val = arrays[0][indicies[0]];
-
-            for(var i = 0; i < l; i++){
-                if(val !== arrays[i][indicies[i]])
-                    return false;
-            }
-            return true;
-        },
-
-        _makeMatrix: function(dimensions,m){
-            if(!dimensions)return;
-            if(m){
-                m[0] = [];
-                this._makeMatrix(--dimensions,m[0]);
-            }else{
-                m = [];
-                this._makeMatrix(--dimensions,m);
-                return m;
-            }
+        var strings = [],dimensions =[],m = [],prev,res,z = 0;
+        for(var i = 0; i < arguments.length; i ++){
+            dimensions.push(arguments[i].length);
+            strings.push(arguments[i].split(''));
         }
+
+        var iterator = new JsCsMatrixUtils.Iterator(dimensions,0);
+        iterator.each(m,function(v,indicies){
+            if(checkEqualsAtIndicies(strings,indicies)){
+                if(indicies.indexOf(0) > -1){
+                    set(m,indicies,1);
+                }else{
+                    prev = indicies.map(function(v){return v - 1;});
+                    set(m,indicies,get(m,prev) + 1);
+                }
+
+                if(get(m,indicies) > z){
+                    z = get(m,indicies);
+                    res = s.slice(indicies[0] - z + 1,i);
+                }else if (get(m,indicies) === z){
+                    res = res + s.slice(indicies[0] - z + 1,i);
+                }
+            }
+        });
+    };
+
+    var checkEqualsAtIndicies = function(arrays,indicies){
+
+        var l = arrays.length,
+            val = arrays[0][indicies[0]];
+
+        for(var i = 0; i < l; i++){
+            if(val !== arrays[i][indicies[i]])
+                return false;
+        }
+        return true;
     };
 
 
-})(this);
+    return LongestCommonSubString;
+
+});

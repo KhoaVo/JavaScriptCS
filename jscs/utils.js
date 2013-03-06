@@ -17,13 +17,14 @@
         extend: extend
     };
 
+
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = JsCsUtils;
+    if ( typeof define === "function" && define.amd)
+        define( [], function () { return JsCsUtils; } );
     else
         root.JsCsUtils = JsCsUtils;
 
-    if ( typeof define === "function" && define.amd)
-        define( [], function () { return JsCsUtils; } );
 })(this);
 
 
