@@ -26,7 +26,6 @@
 /* IN PROGRESS */
 (function(root,factory){
 
-
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = factory(require('../../matrixUtils'));
     else if ( typeof define === "function" && define.amd)
@@ -39,37 +38,60 @@
     var set = JsCsMatrixUtils.setAtIndicies,
         get = JsCsMatrixUtils.getAtIndicies;
 
+    // Takes in a variable about of string arguments. Ex: LongestCommonSubString("foo","foobar","barfoo","foo","foooo")
     var LongestCommonSubString = function(){
-
-        var strings = [],dimensions =[],m = [],prev,res,z = 0;
-        for(var i = 0; i < arguments.length; i ++){
-            dimensions.push(arguments[i].length);
-            strings.push(arguments[i].split(''));
-        }
+        var strings = arguments,dimensions = getMatrixDimensions(strings),
+            m = [],prev,res = {},z = 0,segment,val,strIndicies;
 
         var iterator = new JsCsMatrixUtils.Iterator(dimensions,0);
         iterator.each(m,function(v,indicies){
-            if(checkEqualsAtIndicies(strings,indicies)){
-                if(indicies.indexOf(0) > -1){
+            strIndicies = indicies.map(function(v){return v - 1;});
+            if(indicies.indexOf(0) > -1)
+                return;
+
+            if(checkEqualsAtIndicies(strings,strIndicies)){
+                if(indicies.indexOf(1) > -1){
                     set(m,indicies,1);
                 }else{
                     prev = indicies.map(function(v){return v - 1;});
                     set(m,indicies,get(m,prev) + 1);
                 }
 
-                if(get(m,indicies) > z){
-                    z = get(m,indicies);
-                    res = s.slice(indicies[0] - z + 1,i);
-                }else if (get(m,indicies) === z){
-                    res = res + s.slice(indicies[0] - z + 1,i);
+                val = get(m,indicies);
+                if(val > z){
+                    z = val;
+                    res = {};
+                    segment = getSlice(z,indicies,strings[0]);
+                    res[segment] = val;
+
+                }else if( val === z){
+                    segment = getSlice(z,indicies,strings[0]);
+                    res[segment] = val;
                 }
             }
         });
+
+        console.log(res);
+        return res;
+    };
+
+    var getSlice = function(z,indicies,string){
+        var startIdx = indicies[0] - z;
+        var lastIdx = indicies[0];
+        return string.slice(startIdx,lastIdx);
+    };
+
+    var getMatrixDimensions = function(strings){
+        var dimensions = [];
+        for(var i = 0; i < strings.length; i ++)
+            dimensions.push(strings[i].length + 1);
+
+        return dimensions;
     };
 
     var checkEqualsAtIndicies = function(arrays,indicies){
 
-        var l = arrays.length,
+        var l = indicies.length,
             val = arrays[0][indicies[0]];
 
         for(var i = 0; i < l; i++){
