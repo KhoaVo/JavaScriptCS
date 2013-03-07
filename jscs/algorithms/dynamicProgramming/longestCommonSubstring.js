@@ -38,10 +38,10 @@
     var set = JsCsMatrixUtils.setAtIndicies,
         get = JsCsMatrixUtils.getAtIndicies;
 
-    // Takes in a variable about of string arguments. Ex: LongestCommonSubString("foo","foobar","barfoo","foo","foooo")
+    // Takes in a variable amount of string arguments. Ex: LongestCommonSubString("foo","foobar","barfoo","foo","foooo")
     var LongestCommonSubString = function(){
         var strings = arguments,dimensions = getMatrixDimensions(strings),
-            m = [],prev,res = {},z = 0,segment,val,strIndicies;
+            m = [],prev,res = {},longest = 0,segment,val,strIndicies;
 
         var iterator = new JsCsMatrixUtils.Iterator(dimensions,0);
         iterator.each(m,function(v,indicies){
@@ -58,21 +58,20 @@
                 }
 
                 val = get(m,indicies);
-                if(val > z){
-                    z = val;
+                if(val > longest){
+                    longest = val;
                     res = {};
-                    segment = getSlice(z,indicies,strings[0]);
+                    segment = getSlice(longest,indicies,strings[0]);
                     res[segment] = val;
 
-                }else if( val === z){
-                    segment = getSlice(z,indicies,strings[0]);
+                }else if( val === longest){
+                    segment = getSlice(longest,indicies,strings[0]);
                     res[segment] = val;
                 }
             }
         });
 
-        console.log(res);
-        return res;
+        return Object.keys(res);
     };
 
     var getSlice = function(z,indicies,string){

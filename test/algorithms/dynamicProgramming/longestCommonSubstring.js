@@ -21,7 +21,7 @@
     var res;
     for(var k in testCases){
         if( (res = longestCommonSubString.apply(this, k.split(' '))) !== testCases[k]){
-           // return "Expecting " + testCases[k] + " got " + res;
+            return "Expecting " + testCases[k] + " got " + res;
         }
     }
 
