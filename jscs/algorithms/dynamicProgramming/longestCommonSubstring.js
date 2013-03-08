@@ -1,5 +1,5 @@
 /*
- * Longest common substring implementation in JavaScript
+ * General longest common substring implementation in JavaScript
  * based on the algorithm described in Practical Algorithms in C++ by Bryan Flamig
  * Copyright (c) 2013 Khoa Vo
  *
@@ -23,7 +23,6 @@
  */
 
 
-/* IN PROGRESS */
 (function(root,factory){
 
     if(typeof module !== "undefined" && module.exports)
@@ -38,7 +37,7 @@
     var set = JsCsMatrixUtils.setAtIndicies,
         get = JsCsMatrixUtils.getAtIndicies;
 
-    // Takes in a variable amount of string arguments. Ex: LongestCommonSubString("foo","foobar","barfoo","foo","foooo")
+    // Takes in a variable amount of string arguments. Ex: LongestCommonSubString("foo","foobar","barfoo","foo","foooo") // ["foo"]
     var LongestCommonSubString = function(){
         var strings = arguments,dimensions = getMatrixDimensions(strings),
             m = [],prev,res = {},longest = 0,segment,val,strIndicies;
@@ -100,7 +99,5 @@
         return true;
     };
 
-
     return LongestCommonSubString;
-
 });
