@@ -15,8 +15,10 @@
 
     var _phoneNumberToText = function(phoneNumber,idx,partial,map,ret){
 
-        if(idx > phoneNumber.length - 1)
-            return; ret.push(partial);
+        if(idx > phoneNumber.length - 1){
+            ret.push(partial);
+            return;
+        }
 
         var chars = map[phoneNumber[idx]],l= chars.length;
         for(var i = 0; i < l;i++)
