@@ -32,6 +32,8 @@
         var l = str.length;
         var prefix,suffix,segSuffix;
 
+        //iterate till we find the a prefix
+        //and then call recursively with the remaining
         for(var i= 0; i < l; i++){
             prefix = str.substr(0,i);
             if(dict[prefix]){
@@ -52,7 +54,7 @@
     else if ( typeof define === "function" && define.amd)
         define([], function () { return WordBreak; } );
     else
-        root.WordBreak = WordBreak;
+        root.wordBreak = WordBreak;
 
 })(this);
 

@@ -35,6 +35,9 @@
     'test/algorithms/greedy/knapsack01Greedy',
     'test/algorithms/dynamicProgramming/knapsack01',
     'test/algorithms/dynamicProgramming/longestCommonSubstring',
+    'test/algorithms/dynamicProgramming/minNumbersForSum',
+    'test/algorithms/interviewQuestions/indexOf',
+
 
     'test/dataStructures/linkedlist'
 ]);
