@@ -23,18 +23,18 @@
 (function(root){
 
     /*
-        @param compareFunc  a function used to compare items in the tree. Should take in the parameter
-                            a and b and return -1 if a is less than b, 0 if a is equal b and 1 if a is greater than b.
+     @param compareFunc  a function used to compare items in the tree. Should take in the parameter
+     a and b and return -1 if a is less than b, 0 if a is equal b and 1 if a is greater than b.
      */
-    var BinaryTree = function(compareFunc){
+    var BinarySearchTree = function(compareFunc){
         this._root = null;
+        this._count = 0;
         this._compare = compareFunc;
     };
 
-    var NOT_FOUND = null;
-    BinaryTree.prototype = {
-        constructor: BinaryTree,
-
+    var NOT_FOUND = {};
+    BinarySearchTree.prototype = {
+        constructor: BinarySearchTree,
         find: function(item){
             var node = this._find(this._root,item);
             return node === NOT_FOUND ? null : node.value;
@@ -43,30 +43,63 @@
         //find the first matching item
         insert: function(item){
             var node = this._newNode(item);
-            if(this._root === null)
-                this._root = node;
+            this._root = this._insert(this._root,node);
+            this._count++;
+        },
+
+        _insert:function(root,node){
+            if(!root)
+                return node;
+
+            if(this._compare(node.value,root.value) < 0)
+                root.left = this._insert(root.left,node);
             else
-                this._insert(this._root,item);
+                root.right = this._insert(root.right,node);
+
+            return root;
         },
 
         remove: function(item){
-            var node = this._find(this._root,item);
-            var min;
-            if(node === NOT_FOUND)
+            var oldCount = this._count;
+            this._root = this._remove(this._root,item,true);
+            return this._count < oldCount;
+        },
+
+        _remove: function(root,item,decrement){
+
+            if(!root)
                 return;
 
-            if(node.left && node.right){
-                min = this._findMin(node.right);
-                node.value =min.value;
-                min.value = null;
-                this._replaceNodeInParent(min,min.right);
-            }else if(node.left){
-                this._replaceNodeInParent(node,node.left);
-            }else if (node.right){
-                this._replaceNodeInParent(node,node.right);
-            }else{
-                this._replaceNodeInParent(node,null);
+            var comp = this._compare(item,root.value);
+            var min,minValue,subTree;
+            if(comp === 0){
+
+                if(decrement){
+                    this._count--;
+                }
+                if(!root.left){
+                    subTree = root.right;
+                    this._free(root);
+                    return subTree;
+
+                }else if (!root.right){
+                    subTree = root.left;
+                    this._free(root);
+                    return subTree;
+                }else{
+                    min = this._findMin(root.right);
+                    minValue = min.value;
+                    min.value = root.value;
+                    root.value = minValue;
+                    root.right = this._remove(root.right,min.value,false);
+                }
             }
+            else if(comp < 0)
+                root.left = this._remove(root.left,item);
+            else
+                root.right = this._remove(root.right,item);
+
+            return root;
         },
 
         preOrder: function(func){return this._preOrder(this._root,0,func);},
@@ -113,13 +146,15 @@
             return cur;
         },
 
-        _insert:function(node,item){
-            var res = this._compare(item,node.value);
-            if(res < 0)
-                node.left ? this._insert(node.left,item) : node.left = this._newNode(item,node);
-            else
-                node.right ? this._insert(node.right,item): node.right = this._newNode(item,node);
+        _findMax: function(node){
+            var cur = node;
+            while(cur.right)
+                cur = cur.right;
+
+            return cur;
         },
+
+
 
         _preOrder:function(node,depth,func){
             if(node){
@@ -130,6 +165,7 @@
         },
 
         _inOrder:function(node,depth,func){
+
             if(node){
                 this._inOrder(node.left,depth + 1,func);
                 func(node.value,depth);
@@ -145,38 +181,32 @@
             }
         },
 
-        _replaceNodeInParent: function(node,replacment){
-
-            var parent = node.parent;
-            if(!parent)
-                return;
-
-            if(parent.left === node)
-                parent.left = replacment;
-            else if (parent.right)
-                parent.right = replacment;
-        },
 
         _newNode: function(item,parent){
-            return node = {
+            return {
                 value:item,
                 left:null,
-                right:null,
-                parent: parent
+                right:null
             };
+        },
+
+        _free: function(node){
+            delete node.left;
+            delete node.right;
+            delete node.value;
         }
     };
 
-    BinaryTree.test = function(){
+    BinarySearchTree.test = function(){
 
-        var bt = new BinaryTree(function(a,b){return a-b;});
+        var bt = new BinarySearchTree(function(a,b){return a-b;});
 
-        [38,3,5,66,44,23,1,23,43,987,543,234,2,4,54,28].forEach(function(n){
+        [38,3,5,51,45,22,43].forEach(function(n){
             bt.insert(n);
         });
 
         var a = [];
-        bt.inOrder(function(i,d){a.push(arguments); });
+        bt.inOrder(function(i,d){a.push(i); });
         console.log(a);
         console.log();
 
@@ -196,21 +226,20 @@
         console.log();
 
         console.log(bt.find(43) === 43);
-
-        bt.remove(44);
+        console.log(bt.remove(38));
         a = [];
-        bt.inOrder(function(i,d){a.push(arguments); });
+        bt.levelOrder(function(i,d){a.push(arguments);});
         console.log(a);
         console.log();
     };
 
 
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = BinaryTree;
+        exports = module.exports = BinarySearchTree;
     else if ( typeof define === "function" && define.amd)
-        define([], function () { return BinaryTree; } );
+        define([], function () { return BinarySearchTree; } );
     else
-        root.BinaryTree = BinaryTree;
+        root.BinarySearchTree = BinarySearchTree;
 
 
 })(this);
