@@ -30,7 +30,7 @@
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/matrixUtils"], function (JsCsMatrixUtils) { return factory(JsCsMatrixUtils); } );
     else
-        root.LongestCommonSubString = factory(root.JsCsMatrixUtils);
+        root.longestCommonSubString = factory(root.JsCsMatrixUtils);
 
 })(this,function(JsCsMatrixUtils){
 
@@ -49,12 +49,9 @@
                 return;
 
             if(checkEqualsAtIndicies(strings,strIndicies)){
-                if(indicies.indexOf(1) > -1){
-                    set(m,indicies,1);
-                }else{
-                    prev = indicies.map(function(v){return v - 1;});
-                    set(m,indicies,get(m,prev) + 1);
-                }
+
+                prev = indicies.map(function(v){return v - 1;});
+                set(m,indicies,get(m,prev) + 1);
 
                 val = get(m,indicies);
                 if(val > longest){
@@ -87,8 +84,8 @@
         return dimensions;
     };
 
+    //checks every has the same value at the specified indicies
     var checkEqualsAtIndicies = function(arrays,indicies){
-
         var l = indicies.length,
             val = arrays[0][indicies[0]];
 

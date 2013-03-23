@@ -1,5 +1,6 @@
 /*
- * Power set generator implementation in JavaScript
+ * Binary heap implementation in JavaScript
+ * based on the algorithm described in Practical Algorithms in C++ by Bryan Flamig
  * Copyright (c) 2013 Khoa Vo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,6 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+
 (function(root,factory){
 
     //detect node js
@@ -28,40 +31,28 @@
     else if ( typeof define === "function" && define.amd)
         define(function () { return factory(); } );
     else
-        root.powerSet = factory();
+        root.BinaryHeap = factory();
 
 })(this,function(){
 
-    /*
-        @param set      an array of numbers of strings
-     */
-    var  powerSet = function(set){
-        return _powerSet(set,[[]],{});
+    function BinaryHeap(compareFunc){
+        this.compare = compareFunc;
+    }
+
+    BinaryHeap.prototype = {
+        constructor:BinaryHeap,
+
+        insert:function(){
+
+        },
+
+        findMin:function(){
+
+        },
+
+        findMax:function(){
+
+        }
     };
 
-
-    var _powerSet = function(set,result,added){
-
-        var l = set.length,count = 0,item;
-        if(set.length === 0)
-            return;
-        set.sort();
-        var hash = JSON.stringify(set);
-        if(!added[hash]){
-            added[hash] = true;
-            result.push([].concat(set));
-        }
-
-        //For each of the elements in the current set
-        //make a recursive call passing in  the set without that element
-        while(count != l){
-            item = set.shift();
-            _powerSet([].concat(set),result,added);
-            set.push(item);
-            count++;
-        }
-        return result;
-    };
-
-    return powerSet;
 });

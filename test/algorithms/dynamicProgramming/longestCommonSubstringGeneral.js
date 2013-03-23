@@ -2,9 +2,9 @@
 
     //detect node js
     if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('../../../jscs/algorithms/dynamicProgramming/longestCommonSubstring'));
+        exports = module.exports = factory(require('../../../jscs/algorithms/dynamicProgramming/longestCommonSubstringGeneral'));
     else if ( typeof define === "function" && define.amd)
-        define( ["jscs/algorithms/dynamicProgramming/longestCommonSubstring"], function (longestCommonSubString) { return factory(longestCommonSubString); } );
+        define( ["jscs/algorithms/dynamicProgramming/longestCommonSubstringGeneral"], function (longestCommonSubString) { return factory(longestCommonSubString); } );
 
 
 })(this,function(longestCommonSubString){
