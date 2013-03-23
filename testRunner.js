@@ -34,7 +34,7 @@
     'test/algorithms/divideAndConquer/matrixPeakFinding',
     'test/algorithms/greedy/knapsack01Greedy',
     'test/algorithms/dynamicProgramming/knapsack01',
-    'test/algorithms/dynamicProgramming/longestCommonSubstring',
+    'test/algorithms/dynamicProgramming/longestCommonSubstringGeneral',
     'test/algorithms/dynamicProgramming/minNumbersForSum',
     'test/algorithms/interviewQuestions/indexOf',
 
