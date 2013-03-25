@@ -42,15 +42,17 @@
 
     var _powerSet = function(set,result,added){
 
-        var l = set.length,count = 0,item;
         if(set.length === 0)
             return;
+
         set.sort();
-        var hash = JSON.stringify(set);
-        if(!added[hash]){
-            added[hash] = true;
-            result.push([].concat(set));
-        }
+        var hash = set.join(',');
+        if(added[hash])
+            return;
+
+        var l = set.length,count = 0,item;
+        added[hash] = true;
+        result.push([].concat(set));
 
         //For each of the elements in the current set
         //make a recursive call passing in  the set without that element
