@@ -24,5 +24,5 @@
 
     var res = sp.findGoal("a","f");
     if(res.cost !== 9)
-        return "Expecting 12";
+        return "Expecting 9";
 });
