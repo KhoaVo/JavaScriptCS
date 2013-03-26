@@ -28,7 +28,7 @@
     else if ( typeof define === "function" && define.amd)
         define( ["jscs/utils","jscs/dataStructures/trees/binary/binarySearchTree"], function (JsCsUtils,BinarySearchTree) { return factory(JsCsUtils,BinarySearchTree); } );
     else
-        root.Knapsack01Greedy = factory(root.JsCsUtils,root.BinarySearchTree);
+        root.AvlSearchTree = factory(root.JsCsUtils,root.BinarySearchTree);
 
 
 })(this,function(JsCsUtils,BinarySearchTree){

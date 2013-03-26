@@ -38,6 +38,7 @@
     'test/algorithms/dynamicProgramming/longestCommonSubstringGeneral',
     'test/algorithms/dynamicProgramming/minNumbersForSum',
     'test/algorithms/interviewQuestions/indexOf',
+    'test/algorithms/graph/aStarImpl/shortestPath',
 
 
     'test/dataStructures/linkedlist',
