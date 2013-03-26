@@ -68,8 +68,8 @@
         },
 
         //Dijkstra's is uniform cost search algorithm
-        //therefor we don't treat all path costs with the same value
-        //with teh same priority
+        //therefor we treat path costs with the same value
+        //with the same priority
         h:function(from,to) {
             return 0;
         }
