@@ -51,6 +51,7 @@
             q.insert(startHash);
 
             while(q.getCount()){
+
                 curHash = q.extract();
                 curState = allSet[curHash];
 
@@ -73,8 +74,10 @@
                         previous[nHash] = curState;
                         gScores[nHash] = pathCost;
                         fScores[nHash] = pathCost + self.h(n,goalState);
-                        if(!openSet[nHash])
+                        if(!openSet[nHash]){
+                            openSet[nHash] = 1;
                             q.insert(nHash);
+                        }
                     }
                 });
             }

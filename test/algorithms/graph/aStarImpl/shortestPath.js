@@ -23,6 +23,6 @@
     sp.setAdjacencyList(adjacencyList);
 
     var res = sp.findGoal("a","f");
-    if(res.cost !== 12)
+    if(res.cost !== 9)
         return "Expecting 12";
 });

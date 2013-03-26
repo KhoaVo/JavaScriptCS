@@ -34,15 +34,22 @@
 
 })(this,function(){
 
-    function BinaryMaxHeap(compareFunc){
+    function BinaryMaxHeap(compareFunc,initial){
         this._compare = compareFunc;
         this._count = 0;
         this._heap = [];
         this._lastIdx = -1;
+
+        if(initial){
+            this._heapify(initial);
+            console.log(initial);
+
+        }
     }
 
     BinaryMaxHeap.prototype = {
         constructor:BinaryMaxHeap,
+
 
         insert:function(item){
             this._heap[++this._lastIdx] = item;
@@ -71,6 +78,15 @@
             return this._count;
         },
 
+        _heapify:function(a){
+
+            var start = Math.floor((a.length - 2)/2);
+
+            while(start-- >= 0 ){
+                this._siftDown()
+            }
+        },
+
         _siftUp: function(idx){
 
             if(!idx)
@@ -86,13 +102,18 @@
             }
         },
 
-        _siftDown: function(idx){
+        _siftDown: function(idx,heap,end){
+            heap = heap || this._heap;
+            end = end || this._lastIdx;
 
-            var parentVal = this._heap[idx],
+            if(idx * 2 + 1 > end)
+                return;
+
+            var parentVal = heap[idx],
                 leftChild = idx * 2 + 1,
                 rightChild = idx * 2 + 2,
-                leftVal = this._heap[leftChild],
-                rightVal = this._heap[rightChild],
+                leftVal = heap[leftChild],
+                rightVal = heap[rightChild],
                 larger;
 
             if(leftVal){
@@ -100,7 +121,7 @@
                 if(rightVal && this._compare(rightVal,leftVal) > 0)
                     larger = rightChild;
 
-                if(this._compare(parentVal,this._heap[larger]) < 0){
+                if(this._compare(parentVal,heap[larger]) < 0){
                     this._swap(idx,larger);
                     this._siftDown()
                 }
