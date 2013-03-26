@@ -34,12 +34,15 @@
     'test/algorithms/divideAndConquer/matrixPeakFinding',
     'test/algorithms/greedy/knapsack01Greedy',
     'test/algorithms/dynamicProgramming/knapsack01',
+    'test/algorithms/dynamicProgramming/longestCommonSubstringSimple',
     'test/algorithms/dynamicProgramming/longestCommonSubstringGeneral',
     'test/algorithms/dynamicProgramming/minNumbersForSum',
     'test/algorithms/interviewQuestions/indexOf',
 
 
-    'test/dataStructures/linkedlist'
+    'test/dataStructures/linkedlist',
+    'test/dataStructures/heaps/binaryMinHeap',
+    'test/dataStructures/heaps/binaryMaxHeap'
 ]);
 
 

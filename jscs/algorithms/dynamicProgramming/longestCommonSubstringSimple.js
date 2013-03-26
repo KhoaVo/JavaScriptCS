@@ -49,10 +49,10 @@
                     if (val > longest) {
                         longest = val;
                         result = {};
-                        segment = s1.slice(i - longest, i + 1);
+                        segment = s1.slice(i - longest, i);
                         result[segment] = 1;
                     } else if (val === longest) {
-                        segment = s1.slice(i - longest, i + 1);
+                        segment = s1.slice(i - longest, i);
                         result[segment] = 1;
                     }
 
@@ -61,6 +61,7 @@
                 }
             }
         }
+
 
         return Object.keys(result);
     }

@@ -24,7 +24,6 @@
 
 
 (function(root,factory){
-
     //detect node js
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = factory();
@@ -63,8 +62,13 @@
             return out;
         },
 
+
         peak:function(){
             return this._heap[0];
+        },
+
+        getCount: function(){
+            return this._count;
         },
 
         _siftUp: function(idx){
