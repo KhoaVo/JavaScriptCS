@@ -89,12 +89,12 @@
 
         //should return an array of neighbor states
         getNeighborStates:function(curState){
-            throw new Error('Need to implement getHash!!');
+            throw new Error('Must implement getNeighborStates!!');
         },
 
         //get a unique hash to represent the current state
         getHash:function(state){
-            throw new Error('Need to implement getHash!!');
+            throw new Error('Must implement getHash!!');
         },
 
         //the function g and h should be overriden
