@@ -46,6 +46,7 @@
                 q = this.makePriorityQueue(fScores);
 
             allSet[startHash] = startState;
+            openSet[startHash] = startState;
             gScores[startHash] = 0;
             fScores[startHash] = this.h(startState,goalState);
             q.insert(startHash);
