@@ -17,16 +17,18 @@
     bh.insert(3);
     bh.insert(5);
     bh.insert(2);
+    bh.insert(37);
+
+
+    if(bh._heap.join(',') !== '37,5,15,1,2,3')
+        return "Expecting 37,5,15,1,2,3";
+
+    var max = bh.extract();
+    if(max !== 37)
+        return "Expecting 37";
 
     if(bh._heap.join(',') !== '15,5,3,1,2')
         return "Expecting 15,5,3,1,2";
-
-    var max = bh.extract();
-    if(max !== 15)
-        return "Expecting 15";
-
-    if(bh._heap.join(',') !== '5,2,3,1')
-        return "Expecting 5,2,3,1";
 
 
 });

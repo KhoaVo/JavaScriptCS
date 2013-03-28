@@ -16,28 +16,31 @@
 
     JsCsUtils.extend(BinaryMinHeap,BinaryMaxHeap);
 
-    BinaryMinHeap.prototype._siftUp = function(idx){
+    BinaryMinHeap.prototype._siftUp = function(idx,heap){
 
         if(!idx)
             return;
 
         var parent = Math.floor((idx - 1)/2);
-        var val = this._heap[idx],
-            parentVal = this._heap[parent];
+        var val = heap[idx],
+            parentVal = heap[parent];
 
         if(this._compare(val,parentVal) < 0){
             this._swap(idx,parent);
-            this._siftUp(parent);
+            this._siftUp(parent,heap);
         }
     };
 
-    BinaryMinHeap.prototype._siftDown = function(idx){
+    BinaryMinHeap.prototype._siftDown = function(idx,heap,end){
 
-        var parentVal = this._heap[idx],
+        if(idx * 2 + 1 > end)
+            return;
+
+        var parentVal = heap[idx],
             leftChild = idx * 2 + 1,
             rightChild = idx * 2 + 2,
-            leftVal = this._heap[leftChild],
-            rightVal = this._heap[rightChild],
+            leftVal = heap[leftChild],
+            rightVal = heap[rightChild],
             smaller;
 
         if(leftVal){
@@ -45,9 +48,9 @@
             if(rightVal && this._compare(rightVal,leftVal) < 0)
                 smaller = rightChild;
 
-            if(this._compare(parentVal,this._heap[smaller]) > 0){
+            if(this._compare(parentVal,heap[smaller]) > 0){
                 this._swap(idx,smaller);
-                this._siftDown()
+                this._siftDown(smaller,heap,end);
             }
         }
     };

@@ -54,17 +54,20 @@
         insert:function(item){
             this._heap[++this._lastIdx] = item;
             this._count++;
-            this._siftUp(this._lastIdx);
+            this.siftUp(this._lastIdx);
         },
 
         extract:function(){
+
+            if(!this._count)
+                return;
+
             var out = this._heap[0];
             this._heap[0] = this._heap[this._lastIdx];
             this._heap.pop();
             this._lastIdx--;
             this._count--;
-
-            this._siftDown(0);
+            this.siftDown(0);
 
             return out;
         },
@@ -87,24 +90,34 @@
             }
         },
 
-        _siftUp: function(idx){
+        siftUp:function(idx,heap){
+            this._siftUp(idx,heap || this._heap);
+        },
+
+        siftDown:function(idx,heap,end){
+            this._siftDown(idx,heap || this._heap, end || this._lastIdx)
+        },
+
+        _siftUp: function(idx,heap){
 
             if(!idx)
                 return;
 
+
+
             var parent = Math.floor((idx - 1)/2);
-            var val = this._heap[idx],
-                parentVal = this._heap[parent];
+            var val = heap[idx],
+                parentVal = heap[parent];
 
             if(this._compare(val,parentVal) > 0){
                 this._swap(idx,parent);
-                this._siftUp(parent);
+                this._siftUp(parent,heap);
             }
         },
 
+
+
         _siftDown: function(idx,heap,end){
-            heap = heap || this._heap;
-            end = end || this._lastIdx;
 
             if(idx * 2 + 1 > end)
                 return;
@@ -123,7 +136,7 @@
 
                 if(this._compare(parentVal,heap[larger]) < 0){
                     this._swap(idx,larger);
-                    this._siftDown()
+                    this._siftDown(larger,heap,end);
                 }
             }
         },
