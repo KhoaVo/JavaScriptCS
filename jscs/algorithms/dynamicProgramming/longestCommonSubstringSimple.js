@@ -34,25 +34,29 @@
 })(this,function(){
 
     function lcs(s1, s2) {
-        var iEnd = s1.length + 1,
-            jEnd = s2.length + 1,
+        var iEnd = s1.length,
+            jEnd = s2.length,
             m = [],i, j, val, longest = 0,
             segment, result = {};
 
         m[0] = [];
-        for (i = 1; i < iEnd; i++) {
+        for (i = 0; i < iEnd; i++) {
             m[i] = [];
-            for (j = 1; j < jEnd; j++) {
-                if (s1[i - 1] === s2[j - 1]) {
-                    m[i][j] = (m[i - 1][j - 1] || 0) + 1;
+            for (j = 0; j < jEnd; j++) {
+                if (s1[i] === s2[j]) {
+                    if(i - 1 < 0 || j - 1 < 0)
+                        m[i][j] = 1;
+                    else
+                        m[i][j] = m[i - 1][j - 1] + 1;
+
                     val = m[i][j];
                     if (val > longest) {
                         longest = val;
                         result = {};
-                        segment = s1.slice(i - longest, i);
+                        segment = s1.slice(i - longest + 1, i + 1);
                         result[segment] = 1;
                     } else if (val === longest) {
-                        segment = s1.slice(i - longest, i);
+                        segment = s1.slice(i - longest + 1, i + 1);
                         result[segment] = 1;
                     }
 
@@ -61,7 +65,6 @@
                 }
             }
         }
-
 
         return Object.keys(result);
     }

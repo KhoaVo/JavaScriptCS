@@ -44,14 +44,14 @@
 
         var iterator = new JsCsMatrixUtils.Iterator(dimensions,0);
         iterator.each(m,function(v,indicies){
-            strIndicies = indicies.map(function(v){return v - 1;});
-            if(indicies.indexOf(0) > -1)
-                return;
 
-            if(checkEqualsAtIndicies(strings,strIndicies)){
+            if(checkEqualsAtIndicies(strings,indicies)){
 
                 prev = indicies.map(function(v){return v - 1;});
-                set(m,indicies,get(m,prev) + 1);
+                if(prev.indexOf(-1) > -1)
+                    set(m,indicies,1);
+                else
+                    set(m,indicies,get(m,prev) + 1);
 
                 val = get(m,indicies);
                 if(val > longest){
@@ -59,7 +59,6 @@
                     res = {};
                     segment = getSlice(longest,indicies,strings[0]);
                     res[segment] = val;
-
                 }else if( val === longest){
                     segment = getSlice(longest,indicies,strings[0]);
                     res[segment] = val;
@@ -71,15 +70,16 @@
     };
 
     var getSlice = function(z,indicies,string){
-        var startIdx = indicies[0] - z;
-        var lastIdx = indicies[0];
+        var startIdx = indicies[0] - z + 1;
+        var lastIdx = indicies[0] + 1;
+
         return string.slice(startIdx,lastIdx);
     };
 
     var getMatrixDimensions = function(strings){
         var dimensions = [];
         for(var i = 0; i < strings.length; i ++)
-            dimensions.push(strings[i].length + 1);
+            dimensions.push(strings[i].length);
 
         return dimensions;
     };

@@ -20,7 +20,6 @@
         return minTable[maxSum];
     };
 
-
     if(typeof module !== "undefined" && module.exports)
         exports = module.exports = minNumbersForSum;
     else if ( typeof define === "function" && define.amd)
