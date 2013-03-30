@@ -9,7 +9,7 @@
 
 })(this,function(longestCommonSubString){
 
-    
+
     var testCases = {
         "bfoo efoooob": "foo",
         "aaaafoooooo fo foo fo": "fo",

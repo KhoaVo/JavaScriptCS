@@ -34,17 +34,15 @@
 
 })(this,function(){
 
-    function BinaryMaxHeap(compareFunc,initial){
+    function BinaryMaxHeap(compareFunc,hashFunc){
         this._compare = compareFunc;
         this._count = 0;
         this._heap = [];
         this._lastIdx = -1;
 
-        if(initial){
-            this._heapify(initial);
-            console.log(initial);
-
-        }
+        this._hash = hashFunc || function(item){
+            return item.toString();
+        };
     }
 
     BinaryMaxHeap.prototype = {

@@ -41,8 +41,10 @@
 
             var self = this,
                 curState, curHash, nHash,neighbors,pathCost,
-                previous = {}, allSet = {}, openSet = {},closedSet = {}, gScores = {}, fScores = {},
-                startHash = this.getHash(startState), goalHash = this.getHash(goalState),
+                previous = {}, allSet = {}, openSet = {},closedSet = {},
+                gScores = {}, fScores = {},
+                startHash = this.getHash(startState),
+                isGoal = this.makeIsGoal(goalState),
                 q = this.makePriorityQueue(fScores);
 
             allSet[startHash] = startState;
@@ -56,7 +58,7 @@
                 curHash = q.extract();
                 curState = allSet[curHash];
 
-                if(curHash === goalHash)
+                if(isGoal(curState,curHash))
                     return {cost:gScores[curHash],path:this.getPath(previous,curState)};
 
                 openSet[curHash] = undefined;
@@ -127,6 +129,20 @@
             }
 
             return path;
+        },
+
+        makeIsGoal:function(goalState){
+            var self = this,goalHash;
+            if(typeof goalState === "function"){
+                return function(state){
+                    return goalState(state);
+                }
+            }else{
+                goalHash = this.getHash(goalState);
+                return function(state,stateHash){
+                    return stateHash === goalHash;
+                }
+            }
         }
     }
 
