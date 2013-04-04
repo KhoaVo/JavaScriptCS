@@ -74,9 +74,9 @@
             var min,minValue,subTree;
             if(comp === 0){
 
-                if(decrement){
+                if(decrement)
                     this._count--;
-                }
+
                 if(!root.left){
                     subTree = root.right;
                     this._free(root);
@@ -104,6 +104,7 @@
 
         preOrder: function(func){return this._preOrder(this._root,0,func);},
         inOrder:function(func){return this._inOrder(this._root,0,func);},
+        reverseOrder:function(func){return this._reverseOrder(this._root,0,func);},
         postOrder:function(func){return this._postOrder(this._root,0,func);},
         levelOrder: function(func){
 
@@ -170,6 +171,15 @@
                 this._inOrder(node.left,depth + 1,func);
                 func(node.value,depth);
                 this._inOrder(node.right,depth + 1,func);
+            }
+        },
+
+        _reverseOrder:function(node,depth,func){
+
+            if(node){
+                this._inOrder(node.right,depth + 1,func);
+                func(node.value,depth);
+                this._inOrder(node.left,depth + 1,func);
             }
         },
 

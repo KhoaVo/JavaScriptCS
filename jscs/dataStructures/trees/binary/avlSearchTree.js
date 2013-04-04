@@ -95,6 +95,36 @@
 
         _insertRightBalance: function(root,state){
 
+            var leftTree,
+                rightTree = root.right;
+
+            switch(rightTree.balance){
+                //right left
+                case LEFT_HIGH: root.balance = EVEN;
+                    leftTree.balance = EVEN;
+                    root = this._rotateRight(root);
+                    break;
+
+                //right right
+                case RIGHT_HIGH:rightTree = leftTree.right;
+                    switch(rightTree.balance){
+                        case LEFT_HIGH: root.balance = RIGHT_HIGH;
+                            leftTree.balance = EVEN;
+                            break;
+
+                        default:        root.balance = EVEN;
+                            leftTree.balance = LEFT_HIGH;
+                            break;
+                    }
+
+                    rightTree.balance = EVEN;
+                    root.left = this._rotateLeft(leftTree);
+                    root = this._rotateRight(root);
+                    break;
+            }
+
+            state.taller = false;
+
         },
 
         _insertLeftBalance: function(root,state){

@@ -33,109 +33,106 @@
 
 })(this,function(){
 
-    function PrefixTrie(){
-        this._root  = this._newNode();
+    function PrefixTrie(char){
+        this._char = char;
+        this._children = {};
+        this._endMarker = false;
     }
 
     PrefixTrie.prototype = {
 
         constructor:PrefixTrie,
+        autoComplete:function(str,limit){
 
-        getSuggestions:function(str){
+            if(limit === 0)
+                return [];
 
-            var node = this._traverseToEnd(str),res = [];
-            if(!node) return res;
+            limit = limit || Number.MAX_VALUE;
+            var trie = this._traverse(str),res = [];
+            if(!trie) return res;
 
             var stringBuffer = [],last = str.length - 1,i;
             for(i = 0; i < last; i++)
                 stringBuffer.push(str[i]);
 
-            this._each(node,stringBuffer,function(v){res.push(v);});
+            this._each(trie,stringBuffer,0,limit,function(v){res.push(v);});
             return res;
+        },
+
+        contains:function(str){
+            var trie = this._traverse(str);
+            return trie && trie._endMarker;
         },
 
         insert:function(str){
 
             var i = 0,l = str.length, c,
-                cur = this._root,next;
+                cur = this,next;
 
             for(i = 0; i < l; i++, cur = next){
                 c = str[i];
-                next = this._findNode(c,cur.children);
-                if(!next) next = this._addNode(c,cur.children);
+                next = cur._children[c];
+                if(!next){
+                    next = new PrefixTrie(c);
+                    cur._children[c] = next;
+                }
             }
 
-            cur.endMarker = true;
+            cur._endMarker = true;
         },
 
         remove:function(str){
 
-            var node = this._traverseToEnd(str);
-            if(!node || !node.endMarker)
+            var trie = this._traverse(str);
+            if(!trie || !trie._endMarker)
                 return false;
 
-            node.endMarker = false;
+            trie._endMarker = false;
             return true;
-        },
-
-        contains:function(str){
-            var node = this._traverseToEnd(str);
-            return node && node.endMarker;
         },
 
 
         forEach:function(func){
-            this._each(this._root,[],func);
+            this._each(this,[],0,Number.MAX_VALUE,func);
         },
-
-        _each:function(root,buffer,func){
-
-            buffer.push(root.char);
-            if(root.endMarker)
-                func(buffer.join(''));
-
-            for(var k in root.children)
-                this._each(root.children[k],buffer,func);
-
-            buffer.pop();
-        },
-
-        _traverseToEnd:function(str){
-            var i = 0,l = str.length,
-                cur = this._root,node;
-
-            for(i = 0; i < l && cur; i++){
-                cur = this._findNode(str[i],cur.children);
-                if(!cur) return false;
-            }
-
-            return cur;
-        },
-
 
         /*
-            Encapsulate this out so we
-            can easily change the search implementation
-            if our children storage changes
+            root    node to start searching from
+            buffer  array to append characters to
+            count   current number of entries found
+            limit   max number of entries to find
+            func    callback to call when a key is found
          */
-        _findNode:function(c,children){
-            return children[c];
+        _each:function(trie,buffer,count,limit,func){
+
+            if(count >= limit)
+                return count;
+
+            buffer.push(trie._char);
+            if(trie._endMarker){
+                count++;
+                func(buffer.join(''));
+            }
+
+            for(var char in trie._children)
+                count = this._each(trie._children[char],buffer,count,limit,func);
+
+            buffer.pop();
+            return count;
         },
 
-        _addNode:function(c,children){
-            var node = this._newNode(c);
-            children[c] = node;
-            return node;
-        },
+        _traverse:function(str){
+            var i = 0,l = str.length,
+                trie = this;
 
-        _newNode:function(c){
-            return {
-                char:c,
-                children:{},
-                endMarker:false
-            };
+            for(i = 0; i < l && trie; i++){
+                trie = trie._children[str[i]];
+                if(!trie) return false;
+            }
+            return trie;
         }
     };
+
     return PrefixTrie;
 
 });
