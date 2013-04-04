@@ -89,7 +89,7 @@
 
         _insertLeftBalance: function(root,state){
             var leftTree = root.left,
-                rightTree;
+                rightSubTree;
 
             switch(leftTree.balance){
                 //case is left left, we rotate the root right to balance it out.
@@ -100,8 +100,8 @@
                     break;
                 //case is left right, we need to first rotate the left child left, and then rotate the root right
                 case RIGHT_HIGH:
-                    rightTree = leftTree.right;
-                    switch(rightTree.balance){
+                    rightSubTree = leftTree.right;
+                    switch(rightSubTree.balance){
                        case LEFT_HIGH:
                            root.balance = RIGHT_HIGH;
                            leftTree.balance = EVEN;
@@ -111,7 +111,7 @@
                            leftTree.balance = LEFT_HIGH;
                            break;
                      }
-                     rightTree.balance = EVEN;
+                     rightSubTree.balance = EVEN;
                      root.left = this._rotateLeft(leftTree);
                      root = this._rotateRight(root);
                      break;
@@ -122,14 +122,14 @@
 
 
         _insertRightBalance: function(root,state){
-            var leftTree,
+            var leftSubTree,
                 rightTree= root.right;
 
             switch(rightTree.balance){
                 //case is right left, we need to first rotate the right tree to the right, then the root to the left
                 case LEFT_HIGH:
-                    leftTree = rightTree.left;
-                    switch(leftTree.balance){
+                    leftSubTree = rightTree.left;
+                    switch(leftSubTree.balance){
                         case RIGHT_HIGH:
                             root.balance = LEFT_HIGH;
                             rightTree.balance = EVEN;
@@ -139,7 +139,7 @@
                             rightTree.balance = RIGHT_HIGH;
                             break;
                     }
-                    leftTree.balance = EVEN;
+                    leftSubTree.balance = EVEN;
                     root.right = this._rotateRight(rightTree);
                     root = this._rotateLeft(root);
                     break;
