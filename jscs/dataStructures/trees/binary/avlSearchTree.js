@@ -59,72 +59,32 @@
 
             if(this._compare(node.value,root.value) < 0){
                 root.left = this._insert(root.left,node,state);
-                if(state.taller)
-                    return this._insertLeftTaller(root,state);
-            }else{
-                root.right = this._insert(root.right,node,state);
-                if(state.taller)
-                    return this._insertRightTaller(root,state);
-            }
-
-            return root;
-        },
-
-        _insertLeftTaller: function(root,state){
-
-            switch(root.balance){
-                //left was already high
-                case LEFT_HIGH: this._insertLeftBalance(root,state); break;
-                case EVEN: root.balance = LEFT_HIGH; break;
-                case RIGHT_HIGH: root.balance = EVEN; break;
-            }
-
-            return root;
-        },
-
-        _insertRightTaller:function(root,state){
-
-            switch(root.balance){
-                case LEFT_HIGH: root.balance = EVEN; break;
-                case EVEN: root.balance = RIGHT_HIGH; break;
-                case RIGHT_HIGH:this._insertRightBalance(root,state); break;
-            }
-
-            return root;
-        },
-
-        _insertRightBalance: function(root,state){
-
-            var leftTree,
-                rightTree = root.right;
-
-            switch(rightTree.balance){
-                //right left
-                case LEFT_HIGH: root.balance = EVEN;
-                    leftTree.balance = EVEN;
-                    root = this._rotateRight(root);
-                    break;
-
-                //right right
-                case RIGHT_HIGH:rightTree = leftTree.right;
-                    switch(rightTree.balance){
-                        case LEFT_HIGH: root.balance = RIGHT_HIGH;
-                            leftTree.balance = EVEN;
-                            break;
-
-                        default:        root.balance = EVEN;
-                            leftTree.balance = LEFT_HIGH;
-                            break;
+                if(state.taller){
+                    switch(root.balance){
+                        //was already left high, and we added another on the left. So we balance the left side
+                        case LEFT_HIGH: this._insertLeftBalance(root,state); break;
+                        case EVEN: root.balance = LEFT_HIGH; break;
+                        case RIGHT_HIGH: root.balance = EVEN; break;
                     }
 
-                    rightTree.balance = EVEN;
-                    root.left = this._rotateLeft(leftTree);
-                    root = this._rotateRight(root);
-                    break;
+                    return root;
+                }
+
+            }else{
+                root.right = this._insert(root.right,node,state);
+                if(state.taller){
+                    switch(root.balance){
+                        case LEFT_HIGH: root.balance = EVEN; break;
+                        case EVEN: root.balance = RIGHT_HIGH; break;
+                        case RIGHT_HIGH:this._insertRightBalance(root,state); break;
+                    }
+
+                    return root;
+                }
+
             }
 
-            state.taller = false;
-
+            return root;
         },
 
         _insertLeftBalance: function(root,state){
@@ -132,35 +92,67 @@
                 rightTree;
 
             switch(leftTree.balance){
-                //left left
-                case LEFT_HIGH: root.balance = EVEN;
-                                leftTree.balance = EVEN;
-                                root = this._rotateRight(root);
-                                break;
-                //left right
-                case RIGHT_HIGH:rightTree = leftTree.right;
-                                switch(rightTree.balance){
-                                    case LEFT_HIGH: root.balance = RIGHT_HIGH;
-                                                    leftTree.balance = EVEN;
-                                                    break;
-
-                                    default:        root.balance = EVEN;
-                                                    leftTree.balance = LEFT_HIGH;
-                                                    break;
-                                 }
-
-                                rightTree.balance = EVEN;
-                                root.left = this._rotateLeft(leftTree);
-                                root = this._rotateRight(root);
-                                break;
+                //case is left left, we rotate the root right to balance it out.
+                case LEFT_HIGH:
+                    root.balance = EVEN;
+                    leftTree.balance = EVEN;
+                    root = this._rotateRight(root);
+                    break;
+                //case is left right, we need to first rotate the left child left, and then rotate the root right
+                case RIGHT_HIGH:
+                    rightTree = leftTree.right;
+                    switch(rightTree.balance){
+                       case LEFT_HIGH:
+                           root.balance = RIGHT_HIGH;
+                           leftTree.balance = EVEN;
+                           break;
+                       default:
+                           root.balance = EVEN;
+                           leftTree.balance = LEFT_HIGH;
+                           break;
+                     }
+                     rightTree.balance = EVEN;
+                     root.left = this._rotateLeft(leftTree);
+                     root = this._rotateRight(root);
+                     break;
             }
 
             state.taller = false;
         },
 
 
+        _insertRightBalance: function(root,state){
+            var leftTree,
+                rightTree= root.right;
 
+            switch(rightTree.balance){
+                //case is right left, we need to first rotate the right tree to the right, then the root to the left
+                case LEFT_HIGH:
+                    leftTree = rightTree.left;
+                    switch(leftTree.balance){
+                        case RIGHT_HIGH:
+                            root.balance = LEFT_HIGH;
+                            rightTree.balance = EVEN;
+                            break;
+                        default:
+                            root.balance = EVEN;
+                            rightTree.balance = RIGHT_HIGH;
+                            break;
+                    }
+                    leftTree.balance = EVEN;
+                    root.right = this._rotateRight(rightTree);
+                    root = this._rotateLeft(root);
+                    break;
+                //case is right right, we need to rotate the root to the left.
+                case RIGHT_HIGH:
+                    root.balance = EVEN;
+                    rightTree.balance = EVEN;
+                    root = this._rotateLeft(root);
+                    break;
+            }
 
+            state.taller = false;
+        },
 
         _rotateLeft:function(root){
             var temp = root.right;
