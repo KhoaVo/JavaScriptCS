@@ -67,14 +67,14 @@
         insert:function(str){
 
             var i = 0,l = str.length, c,
-                cur = this,next;
+                cur = this,trie;
 
-            for(i = 0; i < l; i++, cur = next){
+            for(i = 0; i < l; i++, cur = trie){
                 c = str[i];
-                next = cur._children[c];
-                if(!next){
-                    next = new PrefixTrie(c);
-                    cur._children[c] = next;
+                trie = cur._children[c];
+                if(!trie){
+                    trie = new PrefixTrie(c);
+                    cur._children[c] = trie;
                 }
             }
 

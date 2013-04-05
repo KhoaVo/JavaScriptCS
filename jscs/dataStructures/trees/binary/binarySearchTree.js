@@ -61,11 +61,11 @@
 
         remove: function(item){
             var oldCount = this._count;
-            this._root = this._remove(this._root,item,true);
+            this._root = this._remove(this._root,item);
             return this._count < oldCount;
         },
 
-        _remove: function(root,item,decrement){
+        _remove: function(root,item){
 
             if(!root)
                 return;
@@ -74,24 +74,23 @@
             var min,minValue,subTree;
             if(comp === 0){
 
-                if(decrement)
-                    this._count--;
-
                 if(!root.left){
                     subTree = root.right;
                     this._free(root);
+                    this._count--;
                     return subTree;
 
                 }else if (!root.right){
                     subTree = root.left;
                     this._free(root);
+                    this._count--;
                     return subTree;
                 }else{
                     min = this._findMin(root.right);
                     minValue = min.value;
                     min.value = root.value;
                     root.value = minValue;
-                    root.right = this._remove(root.right,min.value,false);
+                    root.right = this._remove(root.right,min.value);
                 }
             }
             else if(comp < 0)
@@ -177,9 +176,9 @@
         _reverseOrder:function(node,depth,func){
 
             if(node){
-                this._inOrder(node.right,depth + 1,func);
+                this._reverseOrder(node.right,depth + 1,func);
                 func(node.value,depth);
-                this._inOrder(node.left,depth + 1,func);
+                this._reverseOrder(node.left,depth + 1,func);
             }
         },
 
