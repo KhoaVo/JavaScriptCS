@@ -71,9 +71,8 @@
                 return;
 
             var comp = this._compare(item,root.value);
-            var min,minValue,subTree;
+            var max,minValue,subTree;
             if(comp === 0){
-
                 if(!root.left){
                     subTree = root.right;
                     this._free(root);
@@ -86,11 +85,9 @@
                     this._count--;
                     return subTree;
                 }else{
-                    min = this._findMin(root.right);
-                    minValue = min.value;
-                    min.value = root.value;
-                    root.value = minValue;
-                    root.right = this._remove(root.right,min.value);
+                    max = this._findMax(root.left);
+                    root.value = max.value;
+                    root.left = this._remove(root.left,max.value);
                 }
             }
             else if(comp < 0)

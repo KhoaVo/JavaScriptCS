@@ -37,9 +37,9 @@
 
 })(this, function (JsCsUtils, BinarySearchTree) {
 
-    var LEFT_HEAVY = 1,
-        EVEN = 0,
-        RIGHT_HEAVY = -1;
+    var LEFT = 'left',
+        EVEN = 'even',
+        RIGHT = 'right';
 
     function AvlSearchTree(compareFunc) {
         AvlSearchTree.super.constructor.call(this, compareFunc);
@@ -49,156 +49,175 @@
 
         _insert: function (root, node, state) {
             state = state || {taller: false};
-
             if (!root) {
                 state.taller = true;
                 return node;
             }
 
-            if (this._compare(node.value, root.value) < 0) {
-                root.left = this._insert(root.left, node, state);
-                if (state.taller) {
-                    switch (root.balance) {
-                        //was already left high, and we added another on the left. So we balance the left side
-                        case LEFT_HEAVY:
-                            root = this._insertLeftBalance(root, state);
-                            break;
-                        case EVEN:
-                            root.balance = LEFT_HEAVY;
-                            break;
-                        case RIGHT_HEAVY:
-                            root = root.balance = EVEN;
-                            break;
-                    }
-                    return root;
-                }
-
-            } else {
-                root.right = this._insert(root.right, node, state);
-                if (state.taller) {
-                    switch (root.balance) {
-                        case LEFT_HEAVY:
-                            root.balance = EVEN;
-                            break;
-                        case EVEN:
-                            root.balance = RIGHT_HEAVY;
-                            break;
-                        case RIGHT_HEAVY:
-                            root = this._insertRightBalance(root, state);
-                            break;
-                    }
-                    return root;
-                }
-            }
-
-            return root;
+            var insertSide = this._compare(node.value, root.value) < 0 ? LEFT : RIGHT;
+            root[insertSide] = this._insert(root[insertSide],node,state);
+            return this._insertBalance(root,insertSide,state);
         },
 
-        _insertLeftBalance: function (root, state) {
-            var leftTree = root.left,
-                rightSubTree;
-
-            switch (leftTree.balance) {
-                //case is left left, we rotate the root right to balance it out.
-                case LEFT_HEAVY:
-                    root.balance = EVEN;
-                    leftTree.balance = EVEN;
-                    root = this._rotateRight(root);
-                    break;
-                //case is left right, we need to first rotate the left child left, and then rotate the root right
-                case RIGHT_HEAVY:
-                    rightSubTree = leftTree.right;
-                    switch (rightSubTree.balance) {
-                        case LEFT_HEAVY:
-                            root.balance = RIGHT_HEAVY;
-                            leftTree.balance = EVEN;
-                            break;
-                        default:
-                            root.balance = EVEN;
-                            leftTree.balance = LEFT_HEAVY;
-                            break;
-                    }
-                    rightSubTree.balance = EVEN;
-                    root.left = this._rotateLeft(leftTree);
-                    root = this._rotateRight(root);
-                    break;
-            }
-
-            state.taller = false;
-            return root;
-        },
-
-        //mirror of insertLeftBalance
-        _insertRightBalance: function (root, state) {
-            var leftSubTree,
-                rightTree = root.right;
-
-            switch (rightTree.balance) {
-                //case is right left, we need to first rotate the right tree to the right, then the root to the left
-                case LEFT_HEAVY:
-                    leftSubTree = rightTree.left;
-                    switch (leftSubTree.balance) {
-                        case RIGHT_HEAVY:
-                            root.balance = LEFT_HEAVY;
-                            rightTree.balance = EVEN;
-                            break;
-                        default:
-                            root.balance = EVEN;
-                            rightTree.balance = RIGHT_HEAVY;
-                            break;
-                    }
-                    leftSubTree.balance = EVEN;
-                    root.right = this._rotateRight(rightTree);
-                    root = this._rotateLeft(root);
-                    break;
-                //case is right right, we need to rotate the root to the left.
-                case RIGHT_HEAVY:
-                    root.balance = EVEN;
-                    rightTree.balance = EVEN;
-                    root = this._rotateLeft(root);
-                    break;
-            }
-
-            state.taller = false;
-            return root;
-        },
-
-        checkCases:function(bal,ifLh,ifE,ifRh){
-            switch (bal) {
-                //was already left high, and we added another on the left. So we balance the left side
-                case LEFT_HEAVY:
-                    ifLh();
-                    break;
-                case EVEN:
-                    ifE();
-                    break;
-                case RIGHT_HEAVY:
-                    ifRh();
-                    break;
-            }
-        },
-
-        _remove:function(root,item,state){
-
+        _remove: function(root,item,state){
             state = state || {shorter:false};
+
+            if(!root)
+                return;
+
             var comp = this._compare(item,root.value);
-
-            if(comp < 0){
-                root.left = this._remove(root.left,item,state);
-            }else if (comp > 0){
-                root.right = this._remove(root.right,item,state);
-            }else{
-
+            var max,minValue,subTree,sideDeleted;
+            if(comp === 0){
+                if(!root.left){
+                    subTree = root.right;
+                    this._free(root);
+                    this._count--;
+                    state.shorter = true;
+                    return subTree;
+                }else if (!root.right){
+                    subTree = root.left;
+                    this._free(root);
+                    this._count--;
+                    state.shorter = true;
+                    return subTree;
+                }else{
+                    max = this._findMax(root.left);
+                    root.value = max.value;
+                    root.left = this._remove(root.left,max.value,state);
+                    root = this._removeBalance(root,LEFT,state);
+                }
             }
+            else if(comp < 0){
+                root.left = this._remove(root.left,item);
+                root = this._removeBalance(root,LEFT,state);
+            }
+            else{
+                root.right = this._remove(root.right,item);
+                root = this._removeBalance(root,RIGHT,state);
+            }
+
+            return root;
+
         },
 
-        _removeLeftBalance:function(){
+        _removeBalance: function(root,sideDeleted,state){
 
+            if(!state.shorter) return;
+
+            var sideNotDeleted,
+                child,childChild,
+                childRotator,rootRotator;
+            if(sideDeleted === LEFT){
+                sideNotDeleted = RIGHT; childRotator = this._rotateRight; rootRotator = this._rotateLeft;
+            }
+            else{
+                sideNotDeleted = LEFT; childRotator = this._rotateLeft; rootRotator = this._rotateRight;
+            }
+
+            child = root[sideNotDeleted];
+            childChild = child[sideDeleted];
+
+            switch(root.balance){
+                case sideDeleted :
+                    root.balance = EVEN;
+                    break;
+                case EVEN :
+                    root.balance = sideNotDeleted;
+                    break;
+                case sideDeleted :
+                    switch(child.balance){
+                        case LEFT :
+                            switch(childChild.balance){
+                                case sideDeleted :
+                                    child.balance = sideNotDeleted;
+                                    root.balance = EVEN;
+                                    break;
+                                case EVEN :
+                                    root.balance = EVEN;
+                                    child.balance = EVEN;
+                                    break;
+                                case sideNotDeleted :
+                                    root.balance = LEFT;
+                                    child.balance = EVEN;
+                                    break;
+                            }
+                            childChild.balance = EVEN;
+                            root[sideNotDeleted] = childRotator(child);
+                            root = rootRotator(root);
+                            break;
+                        default :
+                            switch(child.balance){
+                                case sideNotDeleted :
+                                    root.balance = EVEN;
+                                    child.balance = EVEN;
+                                    break;
+                                case EVEN :
+                                    root.balance = sideNotDeleted;
+                                    child.balance = sideDeleted;
+                                    state.shorter = false;
+                                    break;
+                            }
+                            root = rootRotator(root);
+                            break;
+                    }
+            }
+
+            return root;
         },
 
-        _removeRightBalance:function(){
+        _insertBalance: function (root,sideInserted,state) {
 
+            if(!state.taller) return root;
+            var sideNotInserted,
+                child,childChild,
+                childRotator,rootRotator;
+
+            if(sideInserted === LEFT){
+                sideNotInserted = RIGHT; childRotator = this._rotateLeft; rootRotator = this._rotateRight;
+            }else{
+                sideNotInserted = LEFT; childRotator = this._rotateRight; rootRotator = this._rotateLeft;
+            }
+
+            child = root[sideInserted];
+            childChild = child[sideNotInserted];
+
+            switch (root.balance) {
+                case EVEN :
+                    root.balance = sideInserted;
+                    break;
+                case sideNotInserted :
+                    root.balance = EVEN;
+                    state.taller = false;
+                    break;
+                case sideInserted :
+                    state.taller = false;
+                    switch (child.balance) {
+                        case sideInserted:
+                            root.balance = EVEN;
+                            child.balance = EVEN;
+                            root = rootRotator(root);
+                            break;
+                        case sideNotInserted:
+                            switch (childChild.balance) {
+                                case sideInserted:
+                                    root.balance = sideNotInserted;
+                                    child.balance = EVEN;
+                                    break;
+                                default:
+                                    root.balance = EVEN;
+                                    child.balance = sideInserted;
+                                    break;
+                            }
+                            childChild.balance = EVEN;
+                            root[sideInserted] = childRotator(child);
+                            root = rootRotator(root);
+                            break;
+                    }
+            }
+
+            return root;
         },
+
 
         _rotateLeft: function (root) {
             var temp = root.right;
@@ -215,12 +234,9 @@
         },
 
         _newNode: function (val) {
-            return {
-                value: val,
-                left: null,
-                right: null,
-                balance: EVEN
-            }
+            var n = AvlSearchTree.super._newNode(val);
+            n.balance = EVEN;
+            return n;
         }
     });
 
