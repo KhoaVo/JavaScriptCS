@@ -61,13 +61,15 @@
 
         _remove: function(root,item,state){
             state = state || {shorter:false};
-
-            if(!root)
-                return;
+            if(!root) {
+                state.shorter = false;
+                return null;
+            }
 
             var comp = this._compare(item,root.value);
-            var max,minValue,subTree,sideDeleted;
+            var max,subTree,swap;
             if(comp === 0){
+
                 if(!root.left){
                     subTree = root.right;
                     this._free(root);
@@ -82,17 +84,19 @@
                     return subTree;
                 }else{
                     max = this._findMax(root.left);
+                    swap = root.value;
                     root.value = max.value;
+                    max.value = swap;
                     root.left = this._remove(root.left,max.value,state);
                     root = this._removeBalance(root,LEFT,state);
                 }
             }
             else if(comp < 0){
-                root.left = this._remove(root.left,item);
+                root.left = this._remove(root.left,item,state);
                 root = this._removeBalance(root,LEFT,state);
             }
             else{
-                root.right = this._remove(root.right,item);
+                root.right = this._remove(root.right,item,state);
                 root = this._removeBalance(root,RIGHT,state);
             }
 
@@ -102,20 +106,20 @@
 
         _removeBalance: function(root,sideDeleted,state){
 
-            if(!state.shorter) return;
-
+            if(!state.shorter) return root;
             var sideNotDeleted,
                 child,childChild,
                 childRotator,rootRotator;
             if(sideDeleted === LEFT){
-                sideNotDeleted = RIGHT; childRotator = this._rotateRight; rootRotator = this._rotateLeft;
+                sideNotDeleted = RIGHT;
+                childRotator = this._rotateRight;
+                rootRotator = this._rotateLeft;
             }
             else{
-                sideNotDeleted = LEFT; childRotator = this._rotateLeft; rootRotator = this._rotateRight;
+                sideNotDeleted = LEFT;
+                childRotator = this._rotateLeft;
+                rootRotator = this._rotateRight;
             }
-
-            child = root[sideNotDeleted];
-            childChild = child[sideDeleted];
 
             switch(root.balance){
                 case sideDeleted :
@@ -123,10 +127,13 @@
                     break;
                 case EVEN :
                     root.balance = sideNotDeleted;
+                    state.shorter = false;
                     break;
-                case sideDeleted :
+                case sideNotDeleted :
+                    child = root[sideNotDeleted];
                     switch(child.balance){
-                        case LEFT :
+                        case sideDeleted :
+                            childChild = child[sideDeleted];
                             switch(childChild.balance){
                                 case sideDeleted :
                                     child.balance = sideNotDeleted;
@@ -137,7 +144,7 @@
                                     child.balance = EVEN;
                                     break;
                                 case sideNotDeleted :
-                                    root.balance = LEFT;
+                                    root.balance = sideDeleted;
                                     child.balance = EVEN;
                                     break;
                             }
@@ -178,9 +185,6 @@
                 sideNotInserted = LEFT; childRotator = this._rotateRight; rootRotator = this._rotateLeft;
             }
 
-            child = root[sideInserted];
-            childChild = child[sideNotInserted];
-
             switch (root.balance) {
                 case EVEN :
                     root.balance = sideInserted;
@@ -191,6 +195,7 @@
                     break;
                 case sideInserted :
                     state.taller = false;
+                    child = root[sideInserted];
                     switch (child.balance) {
                         case sideInserted:
                             root.balance = EVEN;
@@ -198,6 +203,7 @@
                             root = rootRotator(root);
                             break;
                         case sideNotInserted:
+                            childChild = child[sideNotInserted];
                             switch (childChild.balance) {
                                 case sideInserted:
                                     root.balance = sideNotInserted;

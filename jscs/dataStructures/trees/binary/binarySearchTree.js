@@ -20,7 +20,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-(function(root){
+(function(root,factory){
+
+    if(typeof module !== "undefined" && module.exports)
+        exports = module.exports = factory();
+    else if ( typeof define === "function" && define.amd)
+        define([], function () { return factory(); } );
+    else
+        root.BinarySearchTree = factory();
+
+})(this,function(){
 
     /*
      @param compareFunc  a function used to compare items in the tree. Should take in the parameter
@@ -35,9 +44,19 @@
     var NOT_FOUND = {};
     BinarySearchTree.prototype = {
         constructor: BinarySearchTree,
+
+        getCount:function(){
+            return this._count;
+        },
+
         find: function(item){
             var node = this._find(this._root,item);
             return node === NOT_FOUND ? null : node.value;
+        },
+
+        findNode: function(item){
+            var node = this._find(this._root,item);
+            return node === NOT_FOUND ? null : node;
         },
 
         //find the first matching item
@@ -71,7 +90,7 @@
                 return;
 
             var comp = this._compare(item,root.value);
-            var max,minValue,subTree;
+            var max,swap,subTree;
             if(comp === 0){
                 if(!root.left){
                     subTree = root.right;
@@ -86,7 +105,9 @@
                     return subTree;
                 }else{
                     max = this._findMax(root.left);
+                    swap = max.value;
                     root.value = max.value;
+                    max.value = swap;
                     root.left = this._remove(root.left,max.value);
                 }
             }
@@ -181,8 +202,8 @@
 
         _postOrder:function(node,depth,func){
             if(node){
-                this._preOrder(node.left,depth + 1,func);
-                this._preOrder(node.right,depth + 1,func);
+                this._postOrder(node.left,depth + 1,func);
+                this._postOrder(node.right,depth + 1,func);
                 func(node.value,depth);
             }
         },
@@ -197,55 +218,11 @@
         },
 
         _free: function(node){
-            delete node.left;
-            delete node.right;
-            delete node.value;
+            node.left = undefined;
+            node.right = undefined;
+            node.value = undefined;
         }
     };
 
-    BinarySearchTree.test = function(){
-
-        var bt = new BinarySearchTree(function(a,b){return a-b;});
-
-        [38,3,5,51,45,22,43].forEach(function(n){
-            bt.insert(n);
-        });
-
-        var a = [];
-        bt.inOrder(function(i,d){a.push(i); });
-        console.log(a);
-        console.log();
-
-        a = [];
-        bt.preOrder(function(i,d){ a.push(arguments);});
-        console.log(a);
-        console.log();
-
-        a = [];
-        bt.postOrder(function(i,d){a.push(arguments);});
-        console.log(a);
-        console.log();
-
-        a = [];
-        bt.levelOrder(function(i,d){a.push(arguments);});
-        console.log(a);
-        console.log();
-
-        console.log(bt.find(43) === 43);
-        console.log(bt.remove(38));
-        a = [];
-        bt.levelOrder(function(i,d){a.push(arguments);});
-        console.log(a);
-        console.log();
-    };
-
-
-    if(typeof module !== "undefined" && module.exports)
-        exports = module.exports = BinarySearchTree;
-    else if ( typeof define === "function" && define.amd)
-        define([], function () { return BinarySearchTree; } );
-    else
-        root.BinarySearchTree = BinarySearchTree;
-
-
-})(this);
+    return BinarySearchTree;
+});
