@@ -11,7 +11,7 @@
 })(this, function (AvlSearchTree) {
 
     var tree = new AvlSearchTree(function (a, b) {return a - b;});
-    var i, numbers, a,numToDelete = 100;
+    var i, numbers, a,numToInsert = 25000,numToDelete = numToInsert/2;
 
     var getHeight = function(node) {
         if (!node)
@@ -20,7 +20,7 @@
     }
 
     numbers = [];
-    for (i = 0; i < numToDelete; i++) {
+    for (i = 0; i < numToInsert; i++) {
         tree.insert(i);
         numbers.push(i);
     }
@@ -37,14 +37,13 @@
     if (Math.abs(leftHeight - rightHeight) > 1)
         return "Tree is out of balance";
 
-    for (i = 0; i < 65; i++) {
-        tree.remove(Math.floor(Math.random() * numToDelete));
+    for (i = 0; i < numToDelete; i++) {
+        tree.remove(Math.floor(Math.random() * numToInsert));
     }
 
     leftHeight = getHeight(tree._root.left);
     rightHeight = getHeight(tree._root.right);
     if (Math.abs(leftHeight - rightHeight) > 1)
         return "Tree is out of balance after deletions";
-
 
 });
