@@ -43,7 +43,12 @@
 
     'test/dataStructures/linkedlist',
     'test/dataStructures/heaps/binaryMinHeap',
-    'test/dataStructures/heaps/binaryMaxHeap'
-]);
+    'test/dataStructures/heaps/binaryMaxHeap',
+    'test/dataStructures/trees/binary/binarySearchTree',
+    'test/dataStructures/trees/binary/avlSearchTree',
+    'test/dataStructures/tries/prefixTrie'
+
+
+    ]);
 
 

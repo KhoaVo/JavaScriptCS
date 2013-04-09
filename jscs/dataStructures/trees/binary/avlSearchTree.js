@@ -21,7 +21,6 @@
  * THE SOFTWARE.
  */
 
-//WORK IN PROGRESS
 (function (root, factory) {
 
     //detect node js

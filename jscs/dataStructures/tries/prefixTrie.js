@@ -37,6 +37,7 @@
         this._char = char;
         this._children = {};
         this._endMarker = false;
+        this._count = 0;
     }
 
     PrefixTrie.prototype = {
@@ -59,6 +60,10 @@
             return res;
         },
 
+        getCount:function(){
+            return this._count;
+        },
+
         contains:function(str){
             var trie = this._traverse(str);
             return trie && trie._endMarker;
@@ -78,7 +83,10 @@
                 }
             }
 
-            cur._endMarker = true;
+            if(!cur._endMarker){
+                this._count++;
+                cur._endMarker = true;
+            }
         },
 
         remove:function(str){
