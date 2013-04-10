@@ -33,10 +33,9 @@
 
 })(this,function(){
 
-    function PrefixTrie(char){
-        this._char = char;
-        this._children = {};
-        this._endMarker = false;
+    var END_MARKER = "$$";
+
+    function PrefixTrie(){
         this._count = 0;
     }
 
@@ -49,14 +48,10 @@
                 return [];
 
             limit = limit || Number.MAX_VALUE;
-            var trie = this._traverse(str),res = [];
-            if(!trie) return res;
+            var startNode = this._traverse(str),res = [];
+            if(!startNode) return res;
 
-            var stringBuffer = [],last = str.length - 1,i;
-            for(i = 0; i < last; i++)
-                stringBuffer.push(str[i]);
-
-            this._each(trie,stringBuffer,0,limit,function(v){res.push(v);});
+            this._each(startNode,str.split(''),0,limit,function(v){res.push(v);});
             return res;
         },
 
@@ -66,36 +61,36 @@
 
         contains:function(str){
             var trie = this._traverse(str);
-            return trie && trie._endMarker;
+            return trie && trie[END_MARKER];
         },
 
         insert:function(str){
 
             var i = 0,l = str.length, c,
-                cur = this,trie;
+                cur = this,node;
 
-            for(i = 0; i < l; i++, cur = trie){
+            for(i = 0; i < l; i++, cur = node){
                 c = str[i];
-                trie = cur._children[c];
-                if(!trie){
-                    trie = new PrefixTrie(c);
-                    cur._children[c] = trie;
+                node = cur[c];
+                if(!node){
+                    node = {};
+                    cur[c] = node;
                 }
             }
 
-            if(!cur._endMarker){
+            if(!cur[END_MARKER]){
                 this._count++;
-                cur._endMarker = true;
+                cur[END_MARKER] = true;
             }
         },
 
         remove:function(str){
 
             var trie = this._traverse(str);
-            if(!trie || !trie._endMarker)
+            if(!trie || !trie[END_MARKER])
                 return false;
 
-            trie._endMarker = false;
+            trie[END_MARKER] = false;
             return true;
         },
 
@@ -116,25 +111,32 @@
             if(count >= limit)
                 return count;
 
-            buffer.push(trie._char);
-            if(trie._endMarker){
+            if(trie[END_MARKER]){
                 count++;
+
                 func(buffer.join(''));
             }
 
-            for(var char in trie._children)
-                count = this._each(trie._children[char],buffer,count,limit,func);
+            for(var char in trie){
+                buffer.push(char);
+                count = this._each(trie[char],buffer,count,limit,func);
+                buffer.pop();
+            }
 
-            buffer.pop();
+
             return count;
         },
 
+        /*
+            Traverse as far down the trie as possible following hte
+            characters in the given string
+         */
         _traverse:function(str){
             var i = 0,l = str.length,
                 trie = this;
 
             for(i = 0; i < l && trie; i++){
-                trie = trie._children[str[i]];
+                trie = trie[str[i]];
                 if(!trie) return false;
             }
             return trie;

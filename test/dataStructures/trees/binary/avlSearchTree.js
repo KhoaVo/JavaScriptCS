@@ -11,7 +11,7 @@
 })(this, function (AvlSearchTree) {
 
     var tree = new AvlSearchTree(function (a, b) {return a - b;});
-    var i, numbers, a,numToInsert = 25000,numToDelete = numToInsert/2;
+    var i, numbers, a,numToInsert = 10000,numToDelete = numToInsert/2;
 
     var getHeight = function(node) {
         if (!node)

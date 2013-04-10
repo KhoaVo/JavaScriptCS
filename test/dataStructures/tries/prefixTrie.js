@@ -7,8 +7,7 @@
 
 })(this,function(PrefixTrie){
 
-    var pf = new PrefixTrie();
-
+    var pf = new PrefixTrie(),expected,res;
 
     pf.insert('foo');
     pf.insert('foobar');
@@ -24,9 +23,18 @@
     if(!pf.contains('foobar'))
         return "Expecting trie to contain foobar";
 
-    var expected = ['hell','hello','helloworld','hellotrie'].join(',');
-    var res = pf.autoComplete('he');
+    expected = ['hell','hello','helloworld','hellotrie'].join(',');
+    res = pf.autoComplete('he');
+    if(res.join(',') !== expected)
+        return "Expecting autocomplete to be : " + expected;
 
+    expected = ['hell','helloworld','hellotrie'].join(',');
+    pf.remove('hello');
+
+    if(!pf.getCount() === 5)
+        return "Expecting trie to contain 6 elements";
+
+    res = pf.autoComplete('he');
     if(res.join(',') !== expected)
         return "Expecting autocomplete to be : " + expected;
 
