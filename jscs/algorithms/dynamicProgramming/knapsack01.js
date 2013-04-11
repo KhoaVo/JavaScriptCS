@@ -36,59 +36,26 @@ http://www.youtube.com/watch?v=EH6h7WA7sDw
         constructor: Knapsack01,
         run: function(){
 
-            var items = this.items,
-                prevSol,curSol,
+            var items = this.items,item,
+                prevSol,remainder,
                 i, j, w, l = items.length,
-                curItem, m = [],k = [];
+                m = [[]],k = [[]];
 
-            this._initArrays(m,k);
-            for( i = 1; i <= l; i++){
-                curItem = items[i - 1];
-                for(w = 1; w <= this.maxWeight; w++){
-                    prevSol = m[i-1][w];
-                    if(w >= curItem.w){
-                        if(m[i-1][w - curItem.w])
-                            curSol =   m[i-1][w - curItem.w] + curItem.v;
-                        else
-                            curSol = curItem.v;
-
-                        m[i][w] = Math.max(prevSol,curSol);
-                        k[i][w] = curSol >= prevSol ? 1:0;
+            for(i =  1; i < l + 1; i++){
+                m[i] = [0];
+                item = this.items[i - 1];
+                for(j = 1; j <= this.maxWeight; j++){
+                    prevSol = m[i - 1][j] || 0;
+                    remainder = m[i - 1][j - item.w ] || 0;
+                    if(item.w <= j){
+                        m[i][j] = Math.max(prevSol, item.v + remainder);
                     }else{
-                        m[i][w] = prevSol;
-                        k[i][w] = 0;
+                        m[i][j] = prevSol;
                     }
                 }
             }
 
-            return this._traceKeepArray(k);
-        },
-
-        _traceKeepArray: function(k){
-            var cur,max = 0,toKeep = [],
-                weightRemaining = this.maxWeight,
-                items = this.items,l=this.items.length, i,j;
-
-            for(i = l; i > 0; i--){
-                for(j = weightRemaining; j > 0;j--){
-                    if(k[i][j]){
-                        cur = items[i - 1];
-                        if(j >= cur.w){
-                            max += cur.v;
-                            toKeep.push(cur);
-                            weightRemaining -= cur.w;
-                            break;
-                        }
-                    }else{
-                        i--;
-                    }
-                }
-            }
-
-            return  {
-                maxValue:max,
-                packed:toKeep
-            };
+            return {maxValue:m[items.length][this.maxWeight]};
         },
 
         setMaxWeight: function(w){this.maxWeight = w;},

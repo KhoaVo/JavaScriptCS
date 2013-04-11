@@ -25,7 +25,7 @@
 
     //detect node js
     if (typeof module !== "undefined" && module.exports)
-        exports = module.exports = factory(require('../../../utils'), require('../../../dataStructures/trees/binary/binarySearchTree'));
+        exports = module.exports = factory(require('../../../utils'), require('./binarySearchTree'));
     else if (typeof define === "function" && define.amd)
         define(["jscs/utils", "jscs/dataStructures/trees/binary/binarySearchTree"], function (JsCsUtils, BinarySearchTree) {
             return factory(JsCsUtils, BinarySearchTree);

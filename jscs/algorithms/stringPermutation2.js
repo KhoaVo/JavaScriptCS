@@ -17,14 +17,14 @@
         return  _permute(chars, [first]);
     }
 
-    function _permute(remainingChars, result) {
+    function _permute(remainingChars, curPermutations) {
 
         var next = [], nextChar;
         if (remainingChars.length === 0)
-            return result;
+            return curPermutations;
 
         nextChar = remainingChars.pop();
-        result.forEach(function (v) {
+        curPermutations.forEach(function (v) {
             for (var i = 0; i <= v.length; i++)
                 next.push(insertAt(v, i, nextChar));
         });
