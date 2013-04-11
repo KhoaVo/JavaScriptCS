@@ -32,38 +32,25 @@
 
 })(this,function(){
 
-    /*
-        @param set      an array of numbers of strings
-     */
-    var  powerSet = function(set){
-        return _powerSet(set,[[]],{});
-    };
 
+    function powerSet(a){
+        return _powerSet(a,0);
+    }
 
-    var _powerSet = function(set,result,added){
+    function _powerSet(a,i){
+        if(a.length === i)
+            return [[]];
 
-        if(set.length === 0)
-            return;
+        var res,item = a[i],
+            moreSubsets = [];
 
-        set.sort();
-        var hash = set.join(',');
-        if(added[hash])
-            return;
+        res = _powerSet(a,i + 1);
+        res.forEach(function(subSet){
+            moreSubsets.push([item].concat(subSet));
+        });
 
-        var l = set.length,count = 0,item;
-        added[hash] = true;
-        result.push([].concat(set));
-
-        //For each of the elements in the current set
-        //make a recursive call passing in  the set without that element
-        while(count != l){
-            item = set.shift();
-            _powerSet([].concat(set),result,added);
-            set.push(item);
-            count++;
-        }
-        return result;
-    };
+        return res.concat(moreSubsets);
+    }
 
     return powerSet;
 });
