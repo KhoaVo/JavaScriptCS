@@ -41,13 +41,12 @@
 
             var self = this,
                 curState, curHash, nHash,neighbors,pathCost,
-                previous = {}, allSet = {}, openSet = {},closedSet = {},
+                previous = {}, openSet = {},closedSet = {},
                 gScores = {}, fScores = {},
                 startHash = this.getHash(startState),
                 isGoal = this.makeIsGoal(goalState),
                 q = this.makePriorityQueue(fScores);
 
-            allSet[startHash] = startState;
             openSet[startHash] = startState;
             gScores[startHash] = 0;
             fScores[startHash] = this.h(startState,goalState);
@@ -56,7 +55,7 @@
             while(q.getCount()){
 
                 curHash = q.extract();
-                curState = allSet[curHash];
+                curState = openSet[curHash];
 
                 if(isGoal(curState,curHash))
                     return {cost:gScores[curHash],path:this.getPath(previous,curState)};
@@ -69,10 +68,15 @@
 
                     pathCost = gScores[curHash] + self.g(curState,n);
                     nHash = self.getHash(n);
-                    allSet[nHash] = n;
+                    openSet[nHash] = n;
+                    
+                    // If the node was already visited AND its path costs is higher than 
+                    // what we already have ignore it.
                     if(closedSet[nHash] && pathCost > gScores[nHash])
                         return;
 
+                    // If it hasn't been visited or it's path is shorter than add
+                    // it to the list of nodes we still need to visit.
                     if(!openSet[nHash] || pathCost < gScores[nHash]){
                         previous[nHash] = curState;
                         gScores[nHash] = pathCost;
